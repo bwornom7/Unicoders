@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'checkit.apps.CheckitConfig',
+    'sass_processor',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +69,12 @@ TEMPLATES = [
     },
 ]
 
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder',
+]
+
 WSGI_APPLICATION = 'unicoders.wsgi.application'
 
 
@@ -78,7 +86,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'checkit',
         'PASSWORD': 'password',
-        'USER': 'root',
+        'USER': 'admin',
         'TEST': {
             'NAME': 'checkittest'
         }
@@ -109,17 +117,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+SASS_PROCESSOR_ROOT = STATIC_URL[1:]

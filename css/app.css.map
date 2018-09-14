@@ -1,0 +1,9 @@
+{
+	"version": 3,
+	"file": "../../home/sam/unicoders/checkit/static/css/app.css",
+	"sources": [
+		"../../home/sam/unicoders/checkit/static/css/app.scss"
+	],
+	"names": [],
+	"mappings": "AAAA,AAAA,IAAI,CAAC;EACJ,gBAAgB,EAAE,KAAK,GACvB"
+}
