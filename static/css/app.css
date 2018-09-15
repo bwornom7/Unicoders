@@ -10,12 +10,13 @@
 .main-nav {
   background-color: #222;
   margin-bottom: 1.2em;
-  color: white; }
+  color: white;
+  box-shadow: 0 0 10px 2px black; }
   .main-nav a {
     text-decoration: none;
     color: white; }
-  .main-nav a .active {
-    border-bottom: 2px solid #940000; }
+  .main-nav .active {
+    background-color: #006970; }
   .main-nav p {
     margin: 0; }
   .main-nav .nav-links a {
@@ -28,6 +29,7 @@
       background-color: #008A94; }
   .main-nav ul {
     margin: 0;
+    padding: 0;
     display: inline-block;
     list-style: none; }
     .main-nav ul li {

@@ -1,5 +1,6 @@
 {% load static %}
 {% load sass_tags %}
+{% with page=request.resolver_match.url_name %}
 
 <!DOCTYPE html>
 <html>
@@ -20,11 +21,11 @@
         <nav>
           <ul class='nav-links'>
             <li>
-              <a href='{% url 'index' %}'><i class='fas fa-university'></i> Home</a>
+              <a href='{% url 'index' %}' class='{% if page == 'index' %}active{% endif %}'><i class='fas fa-university'></i> Home</a>
             </li>
             {% if user.is_authenticated %}
               <li>
-                <a href='{% url 'check_index' %}'><i class='fas fa-credit-card'></i> Checks</a>
+                <a href='{% url 'check_index' %}' class='{% if page == 'check_index' %}active{% endif %}'><i class='fas fa-credit-card'></i> Checks</a>
               </li>
             {% endif %}
           </ul>
@@ -37,7 +38,7 @@
               {% if user.is_authenticated %}
                 <a href='{% url 'logout' %}'><i class='fas fa-paper-plane'></i> Log Out</a>
               {% else %}
-                <a href='{% url 'login' %}'>Log In</a>
+                <a href='{% url 'login' %}'><i class='fas fa-user-circle'></i> Log In</a>
               {% endif %}
             </li>
           </ul>
@@ -67,3 +68,5 @@
     </div>
   </body>
 </html>
+
+{% endwith %}

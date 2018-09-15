@@ -15,18 +15,19 @@ $color-dark: #222;
 }
 
 .main-nav {
+  background-color: $color-dark; 
+  margin-bottom: 1.2em;
+  color: white;
+  box-shadow: 0 0 10px 2px black;
+
   a {
     text-decoration: none;
     color: white;
   }
 
-  a .active {
-    border-bottom: 2px solid $color-sec;
+  .active {
+    background-color: $color-pri-dark;
   }
-
-  background-color: $color-dark;
-  margin-bottom: 1.2em;
-  color: white;
 
   p { margin: 0; }
 
@@ -46,6 +47,7 @@ $color-dark: #222;
 
   ul {
     margin: 0;
+    padding: 0;
     display: inline-block;
     list-style: none;
     li {

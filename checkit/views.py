@@ -25,7 +25,7 @@ def register(request):
       messages.success(request, 'Account successfully created!')
       return redirect('index')
     else:
-      messages.error(request, 'Please correct the error(s) below.')
+      messages.warning(request, 'Please correct the error(s) below.')
   else:
     user_form = UserForm()
 
