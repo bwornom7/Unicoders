@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if form.errors %}
+  <p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+{% if next %}
+  {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+  {% else %}
+    <p>Please login to see this page.</p>
+  {% endif %}
+{% endif %}
+
+<div class='row'>
+  <div class='col-sm-12 col-md-8 col-lg-6 mx-auto form-box'>
+    <h2 class='text-center'>Log In</h2><hr/>
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+
+      <div class='row'>
+        <div class='col-sm-12'>
+          {% include 'snippets/field.html' with field=form.username %}
+        </div>
+        <div class='col-sm-12'>
+          {% include 'snippets/field.html' with field=form.password %}
+        </div>
+        <div class='col-sm-12 col-md-6'>
+          <input class='submit btn btn-primary' type='submit' value='Log In' id='submit'/>
+          <input type="hidden" name="next" value="{{ next }}" />
+        </div>
+        <div class='col-sm-12 col-md-6'>
+          <a class='submit btn btn-secondary' href='{% url 'register' %}'>Register</a>
+        </div>
+      </div>  
+    </form>
+
+    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+  </div>
+</div>
+
+{% endblock %}
