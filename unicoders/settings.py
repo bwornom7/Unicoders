@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -83,10 +84,12 @@ WSGI_APPLICATION = 'unicoders.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'checkit',
         'PASSWORD': 'password',
-        'USER': 'admin',
+        'USER': 'root',
+        'HOST': 'localhost',
+        'PORT': '',
         'TEST': {
             'NAME': 'checkittest'
         }
@@ -130,3 +133,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 SASS_PROCESSOR_ROOT = STATIC_URL[1:]
 
 LOGIN_REDIRECT_URL = '/'
+
+django_heroku.settings(locals())

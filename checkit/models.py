@@ -23,6 +23,7 @@ class Check(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   name = models.CharField(max_length=50, null=True)
   date = models.DateField(auto_now_add=True)
+  address = models.CharField(max_length=150, null=True)
   bank = models.CharField(max_length=50, null=True)
   route = models.CharField(max_length=50, null=True)
 
