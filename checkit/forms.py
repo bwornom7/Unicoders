@@ -5,12 +5,12 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Profile, Check
 
 class UserForm(UserCreationForm):
-  username = forms.CharField()
+  username = forms.CharField(help_text='e.g. foobar97')
   first_name = forms.CharField()
   last_name=forms.CharField()
   email=forms.EmailField(help_text='e.g. foobar97@gmail.com')
-  password1=forms.CharField(widget=forms.PasswordInput())
-  password2=forms.CharField(widget=forms.PasswordInput())
+  password1=forms.CharField(widget=forms.PasswordInput(), label='Password', help_text='Enter your password')
+  password2=forms.CharField(widget=forms.PasswordInput(), label='Confirm Password', help_text='Re-enter your password')
 
   class Meta(UserCreationForm.Meta):
     model = User

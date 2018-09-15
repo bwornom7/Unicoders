@@ -4,3 +4,4 @@ django-compressor
 django-sass-processor
 psycopg2
 django-heroku
+gunicorn
