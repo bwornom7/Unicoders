@@ -83,10 +83,12 @@ WSGI_APPLICATION = 'unicoders.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'checkit',
         'PASSWORD': 'password',
-        'USER': 'admin',
+        'USER': 'root',
+        'HOST': 'localhost',
+        'PORT': '',
         'TEST': {
             'NAME': 'checkittest'
         }
