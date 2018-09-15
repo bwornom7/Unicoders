@@ -64,4 +64,15 @@ label {
   list-style: none;
   background-color: #ff9696; }
 
-/*# sourceMappingURL=../../../../../../static/css/app.css.map */
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center; }
+
+.title {
+  color: #006970;
+  font-family: sans-serif; }
+
+/*# sourceMappingURL=../../../../../../../static/css/app.css.map */
