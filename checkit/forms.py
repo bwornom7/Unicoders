@@ -24,4 +24,4 @@ class ProfileForm(forms.ModelForm):
 class CheckForm(forms.ModelForm):
   class Meta:
     model = Check
-    fields = ['name', 'bank', 'route']
+    fields = ['name', 'bank', 'route', 'address']
