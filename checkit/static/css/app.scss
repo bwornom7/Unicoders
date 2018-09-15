@@ -91,3 +91,16 @@ label {
   list-style: none;
   background-color: rgb(255, 150, 150);
 }
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.title {
+  color: $color-pri-dark;
+  font-family: sans-serif;
+}
