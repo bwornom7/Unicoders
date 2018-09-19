@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %} {{block.super}} - Accounts {% endblock %}
+
+{% block content %}
+
+<div class='row'>
+  <div class='col-sm-12'>
+    <a href='{% url 'account_new' %}' class='btn btn-primary float-right'><i class='fas fa-plus'></i> Add New Account</a>
+
+    <table class='table table-striped table-bordered table-hover'>
+      <thead class='thead-dark'>
+        <tr>
+          <th scope='col'>Name</th>
+          <th scope='col'>Address</th>
+          <th scope='col'>Account Number</th>
+          <th scope='col'>Routing Number</th>
+          <th scope='col'>Date Created</th>
+          <th scope='col'>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for account in accounts %}
+          <tr>
+            <td>{{ account.name }}</td>
+            <td>{{ account.address }}</td>
+            <td>{{ account.number }}</td>
+            <td>{{ account.route }}</td>
+            <td>{{ account.date }}</td>
+            <td>
+              <ul class='actions'>
+                <li><a href='{% url 'account_check_new' account.id %}' title='Add Check'><i class='fas fa-plus-square'></i></a></li>
+                <li><a href='{% url 'account_edit' account.id %}' title='Edit Account'><i class='fas fa-cog'></i></a></li>
+                <li><a href='{% url 'account_check_index' account.id %}' title='View Checks'><i class='fas fa-link'></i></a></li>
+              </ul>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

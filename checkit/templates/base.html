@@ -25,6 +25,9 @@
             </li>
             {% if user.is_authenticated %}
               <li>
+                <a href='{% url 'account_index' %}' class='{% if page == 'account_index' %}active{% endif %}'><i class='fas fa-address-book'></i> Accounts</a>
+              </li>
+              <li>
                 <a href='{% url 'check_index' %}' class='{% if page == 'check_index' %}active{% endif %}'><i class='fas fa-credit-card'></i> Checks</a>
               </li>
             {% endif %}

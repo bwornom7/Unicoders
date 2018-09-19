@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %} {{block.super}} - Checks {% endblock %}
+{% block title %} {{block.super}} - Account Checks {% endblock %}
 
 {% block content %}
 
 <div class='row'>
   <div class='col-sm-12'>
-    <a href='{% url 'check_new' %}' class='btn btn-primary float-right'><i class='fas fa-plus'></i> Add New Check</a>
+    <a href='{% url 'account_check_new' account.id %}' class='btn btn-primary float-right'><i class='fas fa-plus'></i> Add New Check</a>
 
     <table class='table table-striped table-bordered table-hover'>
       <thead class='thead-dark'>
         <tr>
-          <th scope='col'>Account Name</th>
           <th scope='col'>Paid To</th>
           <th scope='col'>Amount</th>
           <th scope='col'>Amount Paid</th>
@@ -19,9 +18,8 @@
         </tr>
       </thead>
       <tbody>
-        {% for check in checks %}
+        {% for check in account.check_set.all %}
           <tr>
-            <td>{{ check.account.name }}</td>
             <td>{{ check.to }}</td>
             <td>{{ check.amount }}</td>
             <td>{{ check.paid }}</td>

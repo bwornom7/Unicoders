@@ -1,11 +1,12 @@
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
-from .forms import ProfileForm, UserForm, CheckForm
-from .models import Check
+from .forms import UserForm, CheckForm, AccountForm
+from .models import Check, Account
+from django.core.paginator import Paginator
 
 def index(request):
   return render(request, 'index.html')
@@ -43,20 +44,54 @@ def check_index(request):
   return render(request, 'checks/index.html', { 'checks': checks })
 
 @login_required
+def check_edit(request, check_id):
+  check = get_object_or_404(Check, pk=check_id)
+
+@login_required
 def check_new(request):
+  messages.info(request, 'Please select an account to add a check.')
+  return redirect(account_index)
+
+@login_required
+def account_index(request):
+  accounts = Account.objects.all()
+  return render(request, 'accounts/index.html', { 'accounts': accounts })
+
+@login_required
+def account_new(request):
+  if request.method == 'POST':
+    form = AccountForm(request.POST)
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Successfully created new account!')
+      return redirect('account_index')
+  else:
+    form = AccountForm()
+
+  return render(request, 'accounts/new.html', { 'form': form })
+
+@login_required
+def account_edit(request, account_id):
+  account = get_object_or_404(Account, pk=account_id)
+
+@login_required
+def account_check_index(request, account_id):
+  account = get_object_or_404(Account, pk=account_id)
+  return render(request, 'accounts/check_index.html', { 'account': account })
+
+@login_required
+def account_check_new(request, account_id): 
+  account = get_object_or_404(Account, pk=account_id)
   if request.method == 'POST':
     form = CheckForm(request.POST)
     if form.is_valid():
       check = form.save(commit=False)
       check.user = request.user
+      check.account = account
       check.save()
       messages.success(request, 'Successfully added new check!')
-      return redirect('check_index')
+      return redirect(account_check_index, account.id)
   else:
     form = CheckForm()
 
   return render(request, 'checks/new.html', { 'form': form })
-
-@login_required
-def check_edit(request):
-  pass

@@ -34,7 +34,7 @@ $color-dark: #222;
   .nav-links {
     a {
       display: block;
-      padding: 20px;
+      padding: 15px 20px;
       margin: 5px 0;
       border-radius: 5px;
       transition-duration: 0.3s;
@@ -103,4 +103,46 @@ label {
 .title {
   color: $color-pri-dark;
   font-family: sans-serif;
+}
+
+.actions {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  li {
+    vertical-aligh: center;
+    display: inline-block;
+    padding: 0 20px;
+    border-right: 1px solid #bebebe;
+    margin-right: -4px;
+
+    &:first-child {
+      padding-left: 8px;
+    }
+
+    &:last-child {
+      border-right: none;
+      padding-right: 0;
+    }
+
+    a {
+      display: block;
+      text-decoration: none;
+      line-height: 1em;
+      color: $color-pri;
+      i {
+        display: block;
+        text-decoration: none;
+        line-height: 1em;
+      }
+    }
+  }
+}
+
+.action-item {
+  color: blue;
+  padding: 0 5px;
+  margin: 0;
+  
 }

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %} {{block.super}} - New Account {% endblock %}
+
+{% block content %}
+
+<div class='row'>
+  <div class='col-sm-12 col-md-8 col-lg-6 mx-auto form-box'>
+    <h2 class='text-center'>Add an Account</h2><hr/>
+
+    <form method='post' >
+      {% csrf_token %}
+
+      {{ form.non_field_errors }}
+
+      <div class='row'>
+        <div class='col-sm-12'>
+          {% include 'snippets/field.html' with field=form.name %}
+        </div>
+        <div class='col-sm-12'>
+          {% include 'snippets/field.html' with field=form.address %}
+        </div>
+        <div class='col-sm-12'>
+          {% include 'snippets/field.html' with field=form.number %}
+        </div>
+        <div class='col-sm-12'>
+          {% include 'snippets/field.html' with field=form.route %}
+        </div>
+        <div class='col-sm-12'>
+          <input class='submit btn btn-primary' type='submit' value='Create Account' id='submit'/>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
