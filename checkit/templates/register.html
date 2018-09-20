@@ -6,7 +6,9 @@
 
 <div class='row'>
   <div class='col-sm-12 col-md-8 col-lg-6 mx-auto form-box'>
-    <h2 class='text-center'>Create Your Account</h2><hr/>
+    <h2 class='text-center'>Create Your Account</h2>
+    <p class='text-center'><i>{{ company }}</i></p>
+    <hr>
 
     <form method='post' >
       {% csrf_token %}
@@ -15,22 +17,22 @@
 
       <div class='row'>
         <div class='col-sm-12 col-md-6'>
-          {% include 'snippets/field.html' with field=user_form.first_name %}
+          {% include 'snippets/field.html' with field=form.first_name %}
         </div>
         <div class='col-sm-12 col-md-6'>
-          {% include 'snippets/field.html' with field=user_form.last_name %}
+          {% include 'snippets/field.html' with field=form.last_name %}
         </div>
         <div class='col-sm-12'>
-          {% include 'snippets/field.html' with field=user_form.username %}
+          {% include 'snippets/field.html' with field=form.username %}
         </div>
         <div class='col-sm-12'>
-          {% include 'snippets/field.html' with field=user_form.email %}
+          {% include 'snippets/field.html' with field=form.email %}
         </div>
         <div class='col-sm-12 col-md-6'>
-          {% include 'snippets/field.html' with field=user_form.password1 %}
+          {% include 'snippets/field.html' with field=form.password1 %}
         </div>
         <div class='col-sm-12 col-md-6'>
-          {% include 'snippets/field.html' with field=user_form.password2 %}
+          {% include 'snippets/field.html' with field=form.password2 %}
         </div>
         <div class='col-sm-12 col-md-6'>
           <input class='submit btn btn-primary' type='submit' value='Create Account' id='submit'/>

@@ -16,19 +16,22 @@
     <script src='{% static 'js/app.js' %}'></script>
   </head>
   <body>
-    <div class='main-nav'>
+    <header>
       <div class='container'>
         <nav>
           <ul class='nav-links'>
             <li>
-              <a href='{% url 'index' %}' class='{% if page == 'index' %}active{% endif %}'><i class='fas fa-university'></i> Home</a>
+              <a  class='no-decoration' href='{% url 'index' %}' class='{% if page == 'index' %}active{% endif %}'><i class='fas fa-university'></i> Home</a>
             </li>
             {% if user.is_authenticated %}
               <li>
-                <a href='{% url 'account_index' %}' class='{% if page == 'account_index' %}active{% endif %}'><i class='fas fa-address-book'></i> Accounts</a>
+                <a class='no-decoration' href='{% url 'company_index' %}' class='{% if page == 'company_index' %}active{% endif %}'><i class='fas fa-building'></i> Companies</a>
               </li>
               <li>
-                <a href='{% url 'check_index' %}' class='{% if page == 'check_index' %}active{% endif %}'><i class='fas fa-credit-card'></i> Checks</a>
+                <a class='no-decoration' href='{% url 'account_index' %}' class='{% if page == 'account_index' %}active{% endif %}'><i class='fas fa-address-book'></i> Accounts</a>
+              </li>
+              <li>
+                <a class='no-decoration' href='{% url 'check_index' %}' class='{% if page == 'check_index' %}active{% endif %}'><i class='fas fa-credit-card'></i> Checks</a>
               </li>
             {% endif %}
           </ul>
@@ -39,15 +42,15 @@
             </li>
             <li>
               {% if user.is_authenticated %}
-                <a href='{% url 'logout' %}'><i class='fas fa-paper-plane'></i> Log Out</a>
+                <a class='no-decoration' href='{% url 'logout' %}'><i class='fas fa-paper-plane'></i> Log Out</a>
               {% else %}
-                <a href='{% url 'login' %}'><i class='fas fa-user-circle'></i> Log In</a>
+                <a class='no-decoration' href='{% url 'login' %}'><i class='fas fa-user-circle'></i> Log In</a>
               {% endif %}
             </li>
           </ul>
         </nav>
       </div>
-    </div>
+    </header>
 
     <div class='container'>
       {% block messages %} 

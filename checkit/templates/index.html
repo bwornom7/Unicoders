@@ -2,13 +2,8 @@
 
 {% block content %}
 <div class="home">
-
-  <img style="float:left;" title="checkiticon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMySURBVGhD7Zm9axRBGMYPvwo7vyr1rxCDVukkuBdnDu5Qk0ZBrW3UYHNdzkJQTCDG/AUx7Kwx0SpgfWBjVKz9akxirYKc77N5D8LeO3ezu7Nrsw/8YHO7877PfOzM7KRWqVKl/Go9b+2fDBvngkjdr0cqDIz+WDf6J13/iaFr+u1DfI+ewbPtdnsfF/9/UpE6TeYekLnv9Uj3UmH0N5SdCBunOFx5qr+sH6fWfEat+Vs0lwLEIBYQk8MXKzI+RexIZvJAvbiF2JzGv2icH6IkS1Jyn1COp2cWbx3ktH5E3XuYuvm1lLAQjH6FnJw+n+KWL9N8H6NXvfREGcPGBoYT28imIGxMS4HLRV1mO+k0sdw8QUNnWw5aHpidtNHH2Ja70H1SwKK4tjEl/g6oIefZlpuwwlKh3IuUK3e7N3rdv496Dz/dFu/DS7AWnGR7o4UlXgpUBH3zb3uPY4ZUosP2hgubrHifIgTxTdI8wN/XN6YHnqUh/cVpA0jmzycLF4HNPH6XngdUiTG2aRd1FW2J5QC+yGI+xugZtmkXPWTEwp7IbB4YvcI27aJuog8PobAHcpmPUe/Zpl1US/qSkgoPMmzuTpLffDwTbbNNu1znf0x3rgZ8mAfwxjbtcqkAzLsa8WUeOFVg1BDCHO1q6E73pjfzwGkI4UWRCu/FpVV9m48xepNt2kUVCMXCCWyVgPFCzAOnaTTFQmarRCHmiYuRusc27cKhk1TYhlSJvfgyHxM2zrJNu+LNXKS+igEs2Crh07zzZg6iYdSRggwjWQlc412Qns2GmmV7o4XjPpf1IEn/5fVu3uhfqT5oIKrAghhsBP1ZSLqXHTXHttyFD2ksHHLAMlE/Liw3j7KtdJo0+qoctDwC02ixnWyqG7UoBS4Fo5+wjezC0SIFWhUTFAnlxD9O2EY+4aCVxuK6mKgA6N1b83a42xcOWss57FJz42/GD3Ba/wrCxhWqyJacPDuIGby41OQ0xYqn2Pksi90AtEih1YP14AiHL0+8Yneo9T6L5oawW0bNpl5hixA2WWRojFpzhlghNsncDnpot5fo2uh3uIctMXaVzhuzSpUqDVGt9g9nUxYfKM5I0wAAAABJRU5ErkJggg==">
-
-    <h1 class="title"> Check It</h1>
-
+    <h1 class="title"><i class='fas fa-check'></i> Check It</h1>
     <p>Enter your bad checks here!  We'll let you know when it's time to send the letters. </p>
-    
     
     {% if user.is_authenticated %}
       <p>Hello, <b>{{ user.profile.full_name }}</b></p>
@@ -17,10 +12,5 @@
       <a href='{% url 'login' %}'><i class='fas fa-user-circle'></i> Log in or sign up to get started</a>
     {% endif %}
 
-   
-  </div>
-
-  <div class="footer">
-    <a href="https://icons8.com">Icon pack by Icons8</a>
   </div>
 {% endblock %}

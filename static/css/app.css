@@ -7,37 +7,69 @@
   .btn-primary:hover {
     background-color: #700000; }
 
-.main-nav {
+header {
   background-color: #222;
   margin-bottom: 1.2em;
   color: white;
-  box-shadow: 0 0 10px 2px black; }
-  .main-nav a {
-    text-decoration: none;
-    color: white; }
-  .main-nav .active {
+  box-shadow: 0 0 10px 2px black;
+  width: 100%; }
+  header .active {
     background-color: #006970; }
-  .main-nav p {
+  header p {
     margin: 0; }
-  .main-nav .nav-links a {
+  header .nav-links a {
     display: block;
     padding: 15px 20px;
     margin: 5px 0;
     border-radius: 5px;
     transition-duration: 0.3s; }
-    .main-nav .nav-links a:hover {
+    header .nav-links a:hover {
       background-color: #008A94; }
-  .main-nav ul {
+  header ul {
     margin: 0;
     padding: 0;
     display: inline-block;
     list-style: none; }
-    .main-nav ul li {
+    header ul li {
       display: inline-block; }
+
+.no-decoration {
+  text-decoration: inherit;
+  color: inherit; }
+  .no-decoration:hover {
+    text-decoration: inherit;
+    color: inherit; }
+
+.company-card {
+  background-color: #c8c8c8;
+  border-radius: 5px;
+  padding: 0.7em;
+  margin-bottom: 1.3em;
+  box-shadow: 0 0 5px 0 black;
+  transition-duration: 0.3s;
+  position: relative;
+  top: 0;
+  left: 0; }
+  .company-card p {
+    margin: 0; }
+  .company-card h3 {
+    border-bottom: 1px solid white; }
+  .company-card:hover {
+    top: -3px;
+    left: -3px;
+    box-shadow: 1px 1px 8px 0 black;
+    background-color: #00B3C3; }
 
 input[type=text], input[type=password], input[type=email] {
   width: 100%;
   padding: 0.6em; }
+  input[type=text] .error, input[type=password] .error, input[type=email] .error {
+    border: 2px solid red; }
+
+textarea {
+  width: 100%;
+  padding: 0.6em;
+  line-height: 1.0em; }
 
 .form-box {
   padding-top: 1.1em;
@@ -64,16 +96,12 @@ label {
   list-style: none;
   background-color: #ff9696; }
 
-.footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  text-align: center; }
-
 .title {
   color: #006970;
   font-family: sans-serif; }
+
+.header-content {
+  margin-bottom: 1em; }
 
 .actions {
   padding: 0;

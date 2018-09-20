@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %} {{block.super}} - Companies {% endblock %}
+
+{% block content %}
+
+<div class='row header-content'>
+  <div class='col'>
+    <a href='{% url 'company_new' %}' class='btn btn-primary float-right'><i class='fas fa-plus'></i> Add New Company</a>
+  </div>
+</div>
+
+<div class='row'>
+  {% for company in companies %}
+    <div class='col-xs-12 col-md-6 col-lg-4'>
+      <a class='no-decoration' href='{% url 'company_edit' company.id %}'>
+        <div class='company-card'>
+            <h3 class='text-center'>{{ company }}</h3>
+            <p>{{ company.desc }}</p>
+        </div>
+      </a>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

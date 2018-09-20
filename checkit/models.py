@@ -7,6 +7,7 @@ from django.core.validators import RegexValidator
 
 class Company(models.Model):
   name = models.CharField(max_length=50, null=True)
+  desc = models.CharField(max_length=1000, null=True)
   wait_period = models.IntegerField(default=10)
 
   def __str__(self):
@@ -16,11 +17,13 @@ class Company(models.Model):
     indexes = [
       models.Index(fields=['name'], name='company_name_idx')
     ]
+    verbose_name_plural = 'companies'
 
 class Bank(models.Model):
   name = models.CharField(max_length=50, null=True)
 
 class Account(models.Model):
+  company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
   name = models.CharField(max_length=50, null=True)
   number = models.CharField(max_length=32, null=True, validators=[
     RegexValidator(r'^[0-9a-zA-Z]*$',

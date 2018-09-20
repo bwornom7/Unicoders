@@ -1,36 +1,16 @@
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from .decorators import logout_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
-from .forms import UserForm, CheckForm, AccountForm
-from .models import Check, Account
+from .forms import UserForm, CheckForm, AccountForm, CompanyForm
+from .models import Check, Account, Company
 from django.core.paginator import Paginator
 
 def index(request):
   return render(request, 'index.html')
-
-def register(request):
-  if request.user.is_authenticated:
-    messages.warning(request, 'You are already logged in.')
-    return redirect('index')
-
-  if request.method == 'POST':
-    user_form = UserForm(request.POST)
-    if user_form.is_valid():
-      user = user_form.save()
-
-      login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-      
-      messages.success(request, 'Account successfully created!')
-      return redirect('index')
-    else:
-      messages.warning(request, 'Please correct the error(s) below.')
-  else:
-    user_form = UserForm()
-
-  return render(request, 'register.html', { 'user_form': user_form })
 
 @login_required
 def logout_user(request):
@@ -54,7 +34,7 @@ def check_new(request):
 
 @login_required
 def account_index(request):
-  accounts = Account.objects.all()
+  accounts = Account.objects.filter(company=request.user.profile.company)
   return render(request, 'accounts/index.html', { 'accounts': accounts })
 
 @login_required
@@ -62,7 +42,9 @@ def account_new(request):
   if request.method == 'POST':
     form = AccountForm(request.POST)
     if form.is_valid():
-      form.save()
+      account = form.save(commit=False)
+      account.company = request.user.profile.company
+      account.save()
       messages.success(request, 'Successfully created new account!')
       return redirect('account_index')
   else:
@@ -95,3 +77,50 @@ def account_check_new(request, account_id):
     form = CheckForm()
 
   return render(request, 'checks/new.html', { 'form': form })
+
+@login_required
+def company_index(request):
+  companies = Company.objects.all()
+  return render(request, 'companies/index.html', { 'companies': companies })
+
+@logout_required
+def company_choose(request):
+  companies = Company.objects.all()
+  return render(request, 'companies/choose.html', { 'companies': companies })
+
+@login_required
+def company_new(request):
+  if request.method == 'POST':
+    form = CompanyForm(request.POST)
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Successfully added company!')
+      return redirect(company_index)
+  else:
+    form = CompanyForm()
+
+  return render(request, 'companies/new.html', { 'form': form })
+
+@login_required
+def company_edit(request, company_id):
+  company = get_object_or_404(Company, pk=company_id)
+
+@logout_required
+def register(request, company_id):
+  company = get_object_or_404(Company, pk=company_id)
+
+  if request.method == 'POST':
+    form = UserForm(request.POST)
+    if form.is_valid():
+      user = form.save()
+      user.profile.company = company
+      user.save()
+
+      login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+      
+      messages.success(request, 'Account successfully created!')
+      return redirect('index')
+  else:
+    form = UserForm()
+
+  return render(request, 'register.html', { 'form': form, 'company': company })

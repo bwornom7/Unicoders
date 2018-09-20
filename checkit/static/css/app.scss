@@ -1,5 +1,6 @@
 $color-pri: #008A94;
 $color-pri-dark: #006970;
+$color-pri-light: #00B3C3;
 $color-sec: #940000;
 $color-sec-dark: #700000;
 $color-dark: #222;
@@ -14,16 +15,12 @@ $color-dark: #222;
   &:hover { background-color: $color-sec-dark; }
 }
 
-.main-nav {
+header {
   background-color: $color-dark; 
   margin-bottom: 1.2em;
   color: white;
   box-shadow: 0 0 10px 2px black;
-
-  a {
-    text-decoration: none;
-    color: white;
-  }
+  width: 100%;
 
   .active {
     background-color: $color-pri-dark;
@@ -56,9 +53,51 @@ $color-dark: #222;
   }
 }
 
+.no-decoration {
+  text-decoration: inherit;
+  color: inherit;
+
+  &:hover {
+    text-decoration: inherit;
+    color: inherit;
+  }
+}
+
+.company-card {
+  background-color: rgb(200, 200, 200);
+  border-radius: 5px;
+  padding: 0.7em;
+  margin-bottom: 1.3em;
+  box-shadow: 0 0 5px 0 black;
+  transition-duration: 0.3s;
+  position: relative;
+  top: 0;
+  left: 0;
+
+  p { margin: 0; }
+  h3 { border-bottom: 1px solid white; }
+
+  &:hover {
+    top: -3px;
+    left: -3px;
+    box-shadow: 1px 1px 8px 0 black;
+    background-color: $color-pri-light;
+  }
+}
+
 input[type=text], input[type=password], input[type=email] {
   width: 100%;
   padding: 0.6em;
+
+  .error {
+    border: 2px solid red;
+  }
+}
+
+textarea {
+  width: 100%;
+  padding: 0.6em;
+  line-height: 1.0em;
 }
 
 .form-box {
@@ -92,17 +131,13 @@ label {
   background-color: rgb(255, 150, 150);
 }
 
-.footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-}
-
 .title {
   color: $color-pri-dark;
   font-family: sans-serif;
+}
+
+.header-content {
+  margin-bottom: 1em;
 }
 
 .actions {
@@ -143,6 +178,5 @@ label {
 .action-item {
   color: blue;
   padding: 0 5px;
-  margin: 0;
-  
+  margin: 0; 
 }

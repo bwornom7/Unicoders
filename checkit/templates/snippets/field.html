@@ -1,8 +1,16 @@
-<label for='{{ field.id_for_label }}'>{{ field.label }}:</label>
-<input type='{{ field.field.widget.input_type }}' 
-       placeholder='{{ field.help_text }}' 
-       id='{{ field.id_for_label }}' 
-       name='{{ field.name }}'
-       {% if field.value %} value='{{ field.value }}' {% endif %}
-       {% if field.errors %} class='error' {% endif %} />
+<label for='{{ field.id_for_label }}'>{{ field.label }}:</label><br/>
+{% if 'textarea' in field.field.widget.template_name %}
+  <textarea rows='5'
+            placeholder='{{ field.help_text }}'
+            id='{{ field.id_for_label }}'
+            name='{{ field.name }}'
+            {% if field.errors %} class='error' {% endif %}>{% if field.value %}{{ field.value }}{% endif %}</textarea>
+{% else %}
+  <input type='{{ field.field.widget.input_type }}' 
+         placeholder='{{ field.help_text }}' 
+         id='{{ field.id_for_label }}' 
+         name='{{ field.name }}'
+         {% if field.value %} value='{{ field.value }}' {% endif %}
+         {% if field.errors %} class='error' {% endif %} />
+{% endif %}
 {{ field.errors }}

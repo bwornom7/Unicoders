@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
-from .models import Check, Account
+from .models import Check, Account, Company
 
 class UserForm(UserCreationForm):
   username = forms.CharField(help_text='e.g. foobar97')
@@ -27,9 +27,17 @@ class AccountForm(forms.ModelForm):
     fields = ('name', 'number', 'route', 'address')
 
 class CheckForm(forms.ModelForm):
-  to = forms.CharField(label='Pay to', help_text='Enter who this check was paid out to')
+  to = forms.CharField(label='Pay To', help_text='Enter who this check was paid out to')
   amount = forms.CharField(help_text='Enter the dollar amount')
 
   class Meta:
     model = Check
     fields = ['to', 'amount']
+
+class CompanyForm(forms.ModelForm):
+  name = forms.CharField(help_text='Enter the company\'s name')
+  desc = forms.CharField(label='Description', help_text='Enter a brief description for this company', widget=forms.Textarea)
+
+  class Meta:
+    model = Company
+    fields = ['name', 'desc']

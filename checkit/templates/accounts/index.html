@@ -4,10 +4,14 @@
 
 {% block content %}
 
-<div class='row'>
+<div class='row header-content'>
   <div class='col-sm-12'>
     <a href='{% url 'account_new' %}' class='btn btn-primary float-right'><i class='fas fa-plus'></i> Add New Account</a>
+  </div>
+</div>
 
+<div class='row'>
+  <div class='col-sm-12'>
     <table class='table table-striped table-bordered table-hover'>
       <thead class='thead-dark'>
         <tr>
@@ -34,6 +38,10 @@
                 <li><a href='{% url 'account_check_index' account.id %}' title='View Checks'><i class='fas fa-link'></i></a></li>
               </ul>
             </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan='6'>No accounts found.</td>
           </tr>
         {% endfor %}
       </tbody>

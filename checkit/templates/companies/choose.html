@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %} {{block.super}} - Choose Company {% endblock %}
+
+{% block content %}
+
+<div class='row'>
+  <div class='col-sm-12'>
+    <h2>Choose your company to get started!</h2>
+    <p>After you choose your company, we'll help you set up a new account.</p>
+    <hr>
+  </div>
+
+  {% for company in companies %}
+    <div class='col-sm-12 col-md-6 col-lg-4'>
+      <a class='no-decoration' href='{% url 'register' company.id %}'>
+        <div class='company-card'>
+            <h3 class='text-center'>{{ company }}</h3>
+            <p>{{ company.desc }}</p>
+        </div>
+      </a>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
