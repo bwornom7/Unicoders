@@ -13,6 +13,7 @@ urlpatterns = [
     path('accounts/', views.account_index, name='account_index'),
     path('accounts/new/', views.account_new, name='account_new'),
     path('accounts/<int:account_id>/', views.account_edit, name='account_edit'),
+    path('accounts/<int:account_id>/delete', views.account_delete, name='account_delete'),
     path('accounts/<int:account_id>/checks/', views.account_check_index, name='account_check_index'),
     path('accounts/<int:account_id>/checks/new/', views.account_check_new, name='account_check_new'),
     path('companies/', views.company_index, name='company_index'),

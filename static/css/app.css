@@ -87,6 +87,9 @@ label {
 .btn {
   margin-top: 1.1em; }
 
+.no-margin {
+  margin: 0; }
+
 .submit {
   width: 100%; }
 

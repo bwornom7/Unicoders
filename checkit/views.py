@@ -8,6 +8,7 @@ from django.contrib import messages
 from .forms import UserForm, CheckForm, AccountForm, CompanyForm
 from .models import Check, Account, Company
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 def index(request):
   return render(request, 'index.html')
@@ -35,7 +36,12 @@ def check_new(request):
 @login_required
 def account_index(request):
   accounts = Account.objects.filter(company=request.user.profile.company)
-  return render(request, 'accounts/index.html', { 'accounts': accounts })
+  search = request.GET.get('search')
+  if search:
+    accounts = accounts.filter(Q(name__icontains=search) | Q(number__icontains=search))
+  context = request.GET.dict()
+  context.update({ 'accounts': accounts })
+  return render(request, 'accounts/index.html', context)
 
 @login_required
 def account_new(request):
@@ -55,6 +61,22 @@ def account_new(request):
 @login_required
 def account_edit(request, account_id):
   account = get_object_or_404(Account, pk=account_id)
+  if request.method == 'POST':
+    form = AccountForm(request.POST, instance=account)
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Account "{}" successfully updated!'.format(account.name))
+      return redirect('account_index')
+  else:
+    form = AccountForm(instance=account)
+  return render(request, 'accounts/new.html', { 'form': form, 'account': account })
+
+@login_required
+def account_delete(request, account_id):
+  account = get_object_or_404(Account, pk=account_id)
+  account.delete()
+  messages.success(request, 'Account "{}" has been deleted.'.format(account.name))
+  return redirect('account_index')
 
 @login_required
 def account_check_index(request, account_id):
