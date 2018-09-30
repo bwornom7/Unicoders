@@ -35,10 +35,10 @@
           {% include 'snippets/field.html' with field=form.password2 %}
         </div>
         <div class='col-sm-12 col-md-6'>
-          <input class='submit btn btn-primary' type='submit' value='Create Account' id='submit'/>
+          <input class='btn btn-primary btn-block' type='submit' value='Create Account' id='submit'/>
         </div>
         <div class='col-sm-12 col-md-6'>
-          <a href='{% url 'login' %}' class='submit btn btn-secondary'>Log In</a>
+          <a href='{% url 'login' %}' class='btn btn-secondary btn-block'>Log In</a>
         </div>
       </div>
     </form>

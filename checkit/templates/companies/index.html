@@ -5,14 +5,18 @@
 {% block content %}
 
 <div class='row header-content'>
-  <div class='col'>
-    <a href='{% url 'company_new' %}' class='btn btn-primary float-right'><i class='fas fa-plus'></i> Add New Company</a>
+  <div class='col-sm-12 col-md-6'>
+    <input value='{% if search %}{{search}}{% endif %}' id='search' type='text' placeholder='Search Company Name' onkeypress='handlesearch(event)'/>
   </div>
+  <div class='col-sm-12 col-md-6'>
+    <a href='{% url 'company_new' %}' class='btn btn-primary float-right no-margin'><i class='fas fa-plus'></i> Add New Company</a>
+  </div>
+  <div class='col-sm-12'><hr/></div>
 </div>
 
 <div class='row'>
   {% for company in companies %}
-    <div class='col-xs-12 col-md-6 col-lg-4'>
+    <div class='col-sm-12 col-md-6 col-lg-4'>
       <a class='no-decoration' href='{% url 'company_edit' company.id %}'>
         <div class='company-card'>
             <h3 class='text-center'>{{ company }}</h3>
@@ -20,7 +24,20 @@
         </div>
       </a>
     </div>
+  {% empty %}
+    <div class='col-sm-12'>
+      {% if search %}
+        <p class='lead'>Your search "{{search}}" did not match any companies.</p>
+      {% else %}
+        <p class='lead'>No companies found.</p>
+      {% endif %}
+    </div>
   {% endfor %}
+
+  <div class='col-sm-12'>
+    <hr>
+    {% include 'snippets/pagination.html' with objects=companies %}
+  </div>  
 </div>
 
 {% endblock %}

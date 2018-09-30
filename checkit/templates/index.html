@@ -1,16 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="home">
-    <h1 class="title"><i class='fas fa-check'></i> Check It</h1>
-    <p>Enter your bad checks here!  We'll let you know when it's time to send the letters. </p>
+<div class='row'>
+  <div class='col'>
+    <h1 class='text-center'><i class='fas fa-check'></i> Check It</h1>
+    <p>Still logging and managing those bounced checks by hand? Our technology is the perfect solution for you. Get started logging checks right here, and we'll let you know when it's time to send the letters.</p>
     
     {% if user.is_authenticated %}
       <p>Hello, <b>{{ user.profile.full_name }}</b></p>
       <a href='{% url 'check_index' %}'><i class='fas fa-credit-card'></i> Get Started</a>
     {% else %}
-      <a href='{% url 'login' %}'><i class='fas fa-user-circle'></i> Log in or sign up to get started</a>
+      <p>Get started today for free! Click below to log in or register.</p>
+      <div class='row'>
+        <div class='col-sm-12 col-md-6'>
+          <a class='btn btn-primary btn-lg btn-block' href='{% url 'login' %}'><i class='fas fa-user-circle'></i> Log In</a>
+        </div>
+        <div class='col-sm-12 col-md-6'>
+          <a class='btn btn-secondary btn-lg btn-block' href='{% url 'company_choose' %}'><i class='fas fa-plus-circle'></i> Register</a>
+        </div>
+      </div>
     {% endif %}
-
   </div>
+</div>
 {% endblock %}

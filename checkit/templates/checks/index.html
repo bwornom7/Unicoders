@@ -5,9 +5,13 @@
 {% block content %}
 
 <div class='row header-content'>
-  <div class='col-sm-12'>
-    <a href='{% url 'check_new' %}' class='btn btn-primary float-right'><i class='fas fa-plus'></i> Add New Check</a>
+  <div class='col-sm-12 col-md-6'>
+    <input value='{% if search %}{{search}}{% endif %}' id='search' type='text' placeholder='Search Account Name or Paid To' onkeypress='handlesearch(event)'/>
   </div>
+  <div class='col-sm-12 col-md-6'>
+    <a href='{% url 'check_new' %}' class='btn btn-primary float-right no-margin'><i class='fas fa-plus'></i> Add New Check</a>
+  </div>
+  <div class='col-sm-12'><hr/></div>
 </div>
 
 <div class='row'>
@@ -33,11 +37,16 @@
           </tr>
         {% empty %}
           <tr>
-            <td colspan='5'>No checks found.</td>
+            {% if search %}
+              <td colspan='5'>Your search "{{search}}" did not match any checks.</td>
+            {% else %}
+              <td colspan='5'>No checks found.</td>
+            {% endif %}
           </tr>
         {% endfor %}
       </tbody>
     </table>
+    {% include 'snippets/pagination.html' with objects=checks %}
   </div>
 </div>
 

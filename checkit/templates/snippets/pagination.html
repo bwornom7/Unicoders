@@ -1,0 +1,19 @@
+<div class='text-center'>
+  {% if objects.has_previous %}
+    <a href='?page=1'><i class='fas fa-angle-double-left'></i></a>
+    <a href='?page={{ objects.previous_page_number }}'><i class='fas fa-angle-left'></i></a>
+  {% else %}
+    <i class='fas fa-angle-double-left fa-disabled'></i>
+    <i class='fas fa-angle-left fa-disabled'></i>
+  {% endif %}
+
+  {{ objects.number }}
+
+  {% if objects.has_next %}
+    <a href='?page={{ objects.next_page_number }}'><i class='fas fa-angle-right'></i></a>
+    <a href='?page={{ objects.paginator.num_pages }}'><i class='fas fa-angle-double-right'></i></a>
+  {% else %}
+    <i class='fas fa-angle-right fa-disabled'></i>
+    <i class='fas fa-angle-double-right fa-disabled'></i>
+  {% endif %}
+</div>

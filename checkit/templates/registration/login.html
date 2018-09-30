@@ -29,11 +29,11 @@
           {% include 'snippets/field.html' with field=form.password %}
         </div>
         <div class='col-sm-12 col-md-6'>
-          <input class='submit btn btn-primary' type='submit' value='Log In' id='submit'/>
+          <input class='submit btn btn-primary btn-block' type='submit' value='Log In' id='submit'/>
           <input type="hidden" name="next" value="{{ next }}" />
         </div>
         <div class='col-sm-12 col-md-6'>
-          <a class='submit btn btn-secondary' href='{% url 'company_choose' %}'>Register</a>
+          <a class='submit btn btn-secondary btn-block' href='{% url 'company_choose' %}'>Register</a>
         </div>
       </div>  
     </form>

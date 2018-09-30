@@ -10,6 +10,23 @@ from .models import Check, Account, Company
 from django.core.paginator import Paginator
 from django.db.models import Q
 
+def process_params(objects, params, filters):
+  if params.get('search'):
+    search = params.get('search')
+    q = Q(**{ filters[0]: search })
+    for f in filters[1:]:
+      q |= Q(**{ f: search })
+    objects = objects.filter(q)
+  per = params.get('per') if params.get('per') else 10
+  page = params.get('page') if params.get('page') else 1
+  paginator = Paginator(objects, per)
+  return paginator.get_page(page)
+
+def process_context(request, vars):
+  context = request.dict()
+  context.update(vars)
+  return context
+
 def index(request):
   return render(request, 'index.html')
 
@@ -22,7 +39,9 @@ def logout_user(request):
 @login_required
 def check_index(request):
   checks = Check.objects.filter(user=request.user)
-  return render(request, 'checks/index.html', { 'checks': checks })
+  checks = process_params(checks, request.GET, ['account__name__icontains', 'to__icontains'])
+  context = process_context(request.GET, { 'checks': checks })
+  return render(request, 'checks/index.html', context)
 
 @login_required
 def check_edit(request, check_id):
@@ -36,11 +55,8 @@ def check_new(request):
 @login_required
 def account_index(request):
   accounts = Account.objects.filter(company=request.user.profile.company)
-  search = request.GET.get('search')
-  if search:
-    accounts = accounts.filter(Q(name__icontains=search) | Q(number__icontains=search))
-  context = request.GET.dict()
-  context.update({ 'accounts': accounts })
+  accounts = process_params(accounts, request.GET, ['name__icontains', 'number__icontains'])
+  context = process_context(request.GET, { 'accounts': accounts })
   return render(request, 'accounts/index.html', context)
 
 @login_required
@@ -81,7 +97,10 @@ def account_delete(request, account_id):
 @login_required
 def account_check_index(request, account_id):
   account = get_object_or_404(Account, pk=account_id)
-  return render(request, 'accounts/check_index.html', { 'account': account })
+  checks = account.check_set.all()
+  checks = process_params(checks, request.GET, ['to__icontains'])
+  context = process_context(request.GET, { 'checks': checks, 'account': account })
+  return render(request, 'accounts/check_index.html', context)
 
 @login_required
 def account_check_new(request, account_id): 
@@ -103,7 +122,9 @@ def account_check_new(request, account_id):
 @login_required
 def company_index(request):
   companies = Company.objects.all()
-  return render(request, 'companies/index.html', { 'companies': companies })
+  companies = process_params(companies, request.GET, ['name__icontains'])
+  context = process_context(request.GET, { 'companies': companies })
+  return render(request, 'companies/index.html', context)
 
 @logout_required
 def company_choose(request):

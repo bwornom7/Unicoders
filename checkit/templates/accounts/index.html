@@ -4,13 +4,14 @@
 
 {% block content %}
 
-<div class='row header-content'>
+<div class='row'>
   <div class='col-sm-12 col-md-6'>
     <input value='{% if search %}{{search}}{% endif %}' id='search' type='text' placeholder='Search Account Name or Number' onkeypress='handlesearch(event)'/>
   </div>
   <div class='col-sm-12 col-md-6'>
     <a href='{% url 'account_new' %}' class='btn btn-primary float-right no-margin'><i class='fas fa-plus'></i> Add New Account</a>
   </div>
+  <div class='col-sm-12'><hr/></div>
 </div>
 
 <div class='row'>
@@ -36,10 +37,18 @@
             <td>{{ account.date }}</td>
             <td>
               <ul class='actions'>
-                <li><a href='{% url 'account_edit' account.id %}' title='Edit Account'><i class='fas fa-cog'></i></a></li>  
-                <li><a href='{% url 'account_check_new' account.id %}' title='Add Check'><i class='fas fa-plus-square'></i></a></li>
-                <li><a href='{% url 'account_check_index' account.id %}' title='View Checks'><i class='fas fa-folder'></i></a></li>
-                <li><a href='{% url 'account_delete' account.id %}' title='Delete Account'><i class='fas fa-trash'></i></a></li>
+                <li><a href='{% url 'account_edit' account.id %}' data-toggle='tooltip' title='Edit Account'>
+                  <i class='fas fa-cog'></i>
+                </a></li>  
+                <li><a href='{% url 'account_check_new' account.id %}' data-toggle='tooltip' title='Add Check'>
+                  <i class='fas fa-plus-square'></i>
+                </a></li>
+                <li><a href='{% url 'account_check_index' account.id %}' data-toggle='tooltip' title='View Checks'>
+                  <i class='fas fa-folder'></i>
+                </a></li>
+                <li><a href='{% url 'account_delete' account.id %}' data-toggle='tooltip' title='Delete Account'>
+                  <i class='fas fa-trash'></i>
+                </a></li>
               </ul>
             </td>
           </tr>
@@ -54,6 +63,7 @@
         {% endfor %}
       </tbody>
     </table>
+    {% include 'snippets/pagination.html' with objects=accounts %}
   </div>
 </div>
 
