@@ -129,7 +129,9 @@ def company_index(request):
 @logout_required
 def company_choose(request):
   companies = Company.objects.all()
-  return render(request, 'companies/choose.html', { 'companies': companies })
+  companies = process_params(companies, request.GET, ['name__icontains'])
+  context = process_context(request.GET, { 'companies': companies })
+  return render(request, 'companies/choose.html', context)
 
 @login_required
 def company_new(request):

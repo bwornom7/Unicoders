@@ -8,6 +8,7 @@
   <div class='col-sm-12'>
     <h2>Choose your company to get started!</h2>
     <p>After you choose your company, we'll help you set up a new account.</p>
+    <input value='{% if search %}{{search}}{% endif %}' id='search' type='text' placeholder='Search Company Name' onkeypress='handlesearch(event)'/>
     <hr>
   </div>
 
@@ -20,7 +21,20 @@
         </div>
       </a>
     </div>
+  {% empty %}
+    <div class='col-sm-12'>
+      {% if search %}
+        <p class='lead'>Your search "{{search}}" did not match any companies.</p>
+      {% else %}
+        <p class='lead'>No companies found.</p>
+      {% endif %}
+    </div>
   {% endfor %}
+
+  <div class='col-sm-12'>
+    <hr>
+    {% include 'snippets/pagination.html' with objects=companies %}
+  </div>  
 </div>
 
 {% endblock %}
