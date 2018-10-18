@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %} {{block.super}} - New Check {% endblock %}
+{% block title %} {{block.super}} - Edit Check {% endblock %}
 
 {% block content %}
 
 <div class='row'>
   <div class='col-sm-12 col-md-8 col-lg-6 mx-auto form-box'>
-    <h2 class='text-center'>Add a Check</h2><hr/>
+    <h2 class='text-center'>Edit Check</h2><hr/>
 
     <form method='post' >
       {% csrf_token %}
@@ -14,6 +14,11 @@
       {{ form.non_field_errors }}
 
       <div class='row'>
+        <div class='col-sm-12'>
+          <label for='id_paid'>Paid?</label>
+          {{ form.paid }}
+          {{ form.paid.errors }}
+        </div>
         <div class='col-sm-12'>
           {% include 'snippets/field.html' with field=form.amount %}
         </div>
@@ -23,7 +28,7 @@
           {{ form.date.errors }}
         </div>
         <div class='col-sm-12'>
-          <input class='submit btn btn-primary' type='submit' value='Create Check' id='submit'/>
+          <input class='submit btn btn-primary' type='submit' value='Update Check' id='submit'/>
         </div>
       </div>
     </form>

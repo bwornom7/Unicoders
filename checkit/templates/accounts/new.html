@@ -4,12 +4,7 @@
 
 {% block content %}
 
-<div class='row'>
-  <div class='col-sm-12 col-md-8 col-lg-6 mx-auto'>
-    <a href='{% url 'account_index' %}'>&lt; back to All Accounts</a>
-  </div>
-</div>
-
+{% include 'snippets/back_link.html' with back_url='account_index' page_name='All Accounts' %}
 <div class='row'>
   <div class='col-sm-12 col-md-8 col-lg-6 mx-auto form-box'>
     <h2 class='text-center'>{% if account %}Edit{% else %}Add an{% endif %} Account</h2><hr/>
@@ -24,13 +19,23 @@
           {% include 'snippets/field.html' with field=form.name %}
         </div>
         <div class='col-sm-12'>
-          {% include 'snippets/field.html' with field=form.address %}
-        </div>
-        <div class='col-sm-12'>
           {% include 'snippets/field.html' with field=form.number %}
         </div>
         <div class='col-sm-12'>
           {% include 'snippets/field.html' with field=form.route %}
+        </div>
+        <div class='col-sm-12'>
+          {% include 'snippets/field.html' with field=form.street %}
+        </div>
+        <div class='col-sm-12 col-md-6'>
+          {% include 'snippets/field.html' with field=form.city %}
+        </div>
+        <div class='col-sm-12 col-md-3'>
+          <label for='id_state'>State:</label>
+          {{ form.state }}
+        </div>
+        <div class='col-sm-12 col-md-3'>
+          {% include 'snippets/field.html' with field=form.zip_code %}
         </div>
         <div class='col-sm-12'>
           <input class='submit btn btn-primary' type='submit' value='{% if account %}Update{% else %}Create{% endif %} Account' id='submit'/>

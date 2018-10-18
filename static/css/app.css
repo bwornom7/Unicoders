@@ -6218,6 +6218,11 @@ textarea {
   padding: 0.6em;
   line-height: 1.0em; }
 
+select {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.6em; }
+
 .form-box {
   padding-top: 1.1em;
   padding-bottom: 1.1em;
@@ -6273,4 +6278,4 @@ label {
   padding: 0 5px;
   margin: 0; }
 
-/*# sourceMappingURL=../../../../../../static/css/app.css.map */
+/*# sourceMappingURL=app.css.map */

@@ -20,20 +20,29 @@
       <thead class='thead-dark'>
         <tr>
           <th scope='col'>Account Name</th>
-          <th scope='col'>Paid To</th>
           <th scope='col'>Amount</th>
           <th scope='col'>Amount Paid</th>
-          <th scope='col'>Date Created</th>
+          <th scope='col'>Check Date</th>
+          <th scope='col'>Actions</th>
         </tr>
       </thead>
       <tbody>
         {% for check in checks %}
-          <tr>
+          <tr class='{% if check.paid %}table-success{% endif %}'>
             <td>{{ check.account.name }}</td>
-            <td>{{ check.to }}</td>
             <td>{{ check.amount }}</td>
-            <td>{{ check.paid }}</td>
+            <td>{{ check.amount_paid }}</td>
             <td>{{ check.date }}</td>
+            <td>
+              <ul class='actions'>
+                <li><a href='{% url 'check_edit' check.id %}' data-toggle='tooltip' title='Edit Check'>
+                  <i class='fas fa-cog'></i>
+                </a></li>
+                <li><a href='{% url 'check_delete' check.id %}' data-toggle='tooltip' title='Delete Check'>
+                  <i class='fas fa-trash'></i>
+                </a></li>
+              </ul>
+            </td>
           </tr>
         {% empty %}
           <tr>

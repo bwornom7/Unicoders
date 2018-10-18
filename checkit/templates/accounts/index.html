@@ -20,7 +20,7 @@
       <thead class='thead-dark'>
         <tr>
           <th scope='col'>Name</th>
-          <th scope='col'>Address</th>
+          <th scope='col'>Street Address</th>
           <th scope='col'>Account Number</th>
           <th scope='col'>Routing Number</th>
           <th scope='col'>Date Created</th>
@@ -31,10 +31,10 @@
         {% for account in accounts %}
           <tr>
             <td>{{ account.name }}</td>
-            <td>{{ account.address }}</td>
+            <td>{{ account.street }}</td>
             <td>{{ account.number }}</td>
             <td>{{ account.route }}</td>
-            <td>{{ account.date }}</td>
+            <td>{{ account.date_created }}</td>
             <td>
               <ul class='actions'>
                 <li><a href='{% url 'account_edit' account.id %}' data-toggle='tooltip' title='Edit Account'>
