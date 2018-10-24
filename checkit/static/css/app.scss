@@ -1,9 +1,29 @@
+@font-face {
+  font-family: 'Enigmatic';
+  src: url('../fonts/enigmatic.ttf') format('truetype'), local('Enigmatic');
+}
+
+@font-face {
+  font-family: 'Expressway';
+  src: url('../fonts/expressway.ttf') format('truetype'), local('Expressway');
+}
+
 $theme-colors: (
   'primary': #940000,
   'second': #17A2BB,
+  'gray': #EEEEEE,
 );
 
 @import "bootstrap/bootstrap";
+
+body {
+  background-color: theme-color('gray');
+  //font-family: 'Expressway', 'sans-serif';
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Expressway', 'sans-serif';
+}
 
 .fa-disabled {
   opacity: 0.6;
@@ -71,24 +91,23 @@ header {
 }
 
 .company-card {
-  background-color: rgb(200, 200, 200);
-  border-radius: 5px;
+  background-color: white;
+  border-radius: .5em;
   padding: 0.7em;
   margin-bottom: 1.3em;
-  box-shadow: 0 0 5px 0 black;
-  transition-duration: 0.3s;
+  transition-duration: 0.2s;
   position: relative;
+  box-shadow: #AAAAAA 0px 2px 4px 0px;
   top: 0;
   left: 0;
 
   p { margin: 0; }
-  h3 { border-bottom: 1px solid white; }
+  h3 { border-bottom: 1px solid #AAAAAA; }
 
   &:hover {
-    top: -3px;
-    left: -3px;
-    box-shadow: 1px 1px 8px 0 black;
-    background-color: theme-color('second');
+    top: -1px;
+    left: -1px;
+    box-shadow: #AAAAAA 0px 6px 16px 0px;
   }
 }
 
@@ -183,4 +202,42 @@ label {
   color: blue;
   padding: 0 5px;
   margin: 0; 
+}
+
+.data-table {
+  border-collapse: separate;
+  border-spacing: 0 .75em;
+  thead {
+    th {
+      padding: 0 1.2em;
+      border: 0;
+      background-color: inherit;
+    }
+  }
+  tbody {
+    .row-success td {
+      background-color: #BBFFBB;
+    }
+    tr {
+      box-shadow: #AAAAAA 0px 2px 4px 0px;
+      border-radius: .5em;
+      transition-duration: 0.2s;
+      &:hover {
+        box-shadow: #AAAAAA 0px 4px 10px 0px;
+      }
+      td:first-child {
+        border-bottom-left-radius: .5em;
+        border-top-left-radius: .5em;
+      }
+      td:last-child {
+        border-bottom-right-radius: .5em;
+        border-top-right-radius: .5em;
+      }
+      td {
+        padding: 1.2em 1.2em;
+        border: 0;
+        background-color: white;
+      }
+    }
+  }
 }
