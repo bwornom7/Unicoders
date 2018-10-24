@@ -24,7 +24,8 @@ class Company(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['name'], name='company_name_idx')
+            models.Index(fields=['name'], name='company_name_idx'),
+            models.Index(fields=['date_created'], name='company_date_created_idx')
         ]
         verbose_name_plural = 'companies'
 
@@ -57,7 +58,9 @@ class Account(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['date_created'], name='account_date_created_idx')
+            models.Index(fields=['date_created'], name='account_date_created_idx'),
+            models.Index(fields=['name'], name='account_name_idx'),
+            models.Index(fields=['number'], name='account_number_idx')
         ]
 
 
@@ -77,7 +80,6 @@ class Check(models.Model):
         return '{} --> {}: {}'.format(self.account.name, self.to, self.amount)
 
     class Meta:
-        ordering = ['-date']
         indexes = [
             models.Index(fields=['date_created'], name='check_date_created_idx')
         ]

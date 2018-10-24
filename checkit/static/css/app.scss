@@ -241,3 +241,11 @@ label {
     }
   }
 }
+
+.sort-link {
+  text-decoration: none !important;
+  color: inherit;
+  &.active {
+    color: theme-color('primary');
+  }
+}

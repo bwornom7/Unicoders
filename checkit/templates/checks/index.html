@@ -19,10 +19,11 @@
     <table class='table data-table'>
       <thead>
         <tr>
-          <th scope='col'>Account Name</th>
-          <th scope='col'>Amount</th>
-          <th scope='col'>Amount Paid</th>
-          <th scope='col'>Check Date</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='account__name' heading='Account Name' %}</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='amount' heading='Amount' %}</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='amount_paid' heading='Amount Paid' %}</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='date' heading='Check Date' %}</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='date_created' heading='Date Created' %}</th>
           <th scope='col'>Actions</th>
         </tr>
       </thead>
@@ -33,6 +34,7 @@
             <td>{{ check.amount }}</td>
             <td>{{ check.amount_paid }}</td>
             <td>{{ check.date }}</td>
+            <td>{{ check.date_created }}</td>
             <td>
               <ul class='actions'>
                 <li><a href='{% url 'check_edit' check.id %}' data-toggle='tooltip' title='Edit Check'>

@@ -19,11 +19,11 @@
     <table class='table data-table'>
       <thead>
         <tr>
-          <th scope='col'>Name</th>
-          <th scope='col'>Street Address</th>
-          <th scope='col'>Account Number</th>
-          <th scope='col'>Routing Number</th>
-          <th scope='col'>Date Created</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='name' heading='Name' %}</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='street' heading='Address' %}</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='number' heading='Account Number' %}</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='route' heading='Routing Number' %}</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='date_created' heading='Date Created' %}</th>
           <th scope='col'>Actions</th>
         </tr>
       </thead>

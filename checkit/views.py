@@ -16,6 +16,7 @@ def process_params(objects, params, filters):
         for f in filters[1:]:
             q |= Q(**{f: search})
         objects = objects.filter(q)
+    objects = objects.order_by(params.get('sort') if params.get('sort') else '-date_created')
     per = params.get('per') if params.get('per') else 10
     page = params.get('page') if params.get('page') else 1
     paginator = Paginator(objects, per)
