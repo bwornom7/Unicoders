@@ -79,7 +79,7 @@ class Check(models.Model):
     letter3_date = models.DateField(null=True)
 
     def __str__(self):
-        return '{} --> {}: {}'.format(self.account.name, self.to, self.amount)
+        return '{}: {}'.format(self.account.name, self.amount)
 
     class Meta:
         indexes = [
