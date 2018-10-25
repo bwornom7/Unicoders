@@ -1,12 +1,22 @@
+from typing import Dict, Any, Union
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+
+from checkit.models import Check
 from .decorators import logout_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import *
 from .models import Check, Account, Company
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, QuerySet
+from django.http import HttpResponse
+
+from io import StringIO, BytesIO
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from django.template import Context
 
 
 def process_params(objects, params, filters):
@@ -211,3 +221,19 @@ def register(request, company_id):
         form = UserForm()
 
     return render(request, 'register.html', {'form': form, 'company': company})
+
+
+@login_required
+def letter(request):
+    checks = Check.objects.filter(user=request.user)
+    company = request.user.profile.company
+
+    template = get_template('letters/letter1.html')
+    context = {'checks': checks, 'company': company, 'user': request.user}
+    html = template.render(context)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(StringIO(html), dest=result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    else:
+        return HttpResponse('Errors')

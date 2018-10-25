@@ -1,6 +1,19 @@
 $(document).ready(() => {
   $('.alert').delay(5000).fadeOut(1000);
 
+  $('.navTrigger').click(function() {
+    $(this).toggleClass('active');
+    $('.navContent').toggleClass('show');
+
+    if($(this).hasClass('active')) {
+      $('html, body').css({ overflow: 'hidden', height: '100%' });
+      $('#progressContainer').css({ opacity: '0', visibility: 'hidden' });
+    } else {
+      $('html, body').css({ overflow: 'auto', height: 'auto' });
+      $('#progressContainer').css({ opacity: '1', visibility: 'visible' });
+    }
+  });
+
   $('a').each((i, a) => {
     let qidx = a.href.indexOf('?');
     let location = qidx == -1 ? a.href : a.href.substring(0, qidx);

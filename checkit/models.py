@@ -17,6 +17,7 @@ class Company(models.Model):
                        message='Zip code must be five digits.',
                        code='invalid_zip_code')
     ])
+    late_fee = models.DecimalField(decimal_places=2, max_digits=10, default=50, null=True)
     date_created = models.DateField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):
@@ -67,6 +68,7 @@ class Account(models.Model):
 class Check(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    number = models.IntegerField(default=0, null=True)
     amount = models.DecimalField(decimal_places=2, max_digits=10, null=True)
     paid = models.BooleanField(default=False)
     amount_paid = models.DecimalField(decimal_places=2, max_digits=10, default=0, null=True)

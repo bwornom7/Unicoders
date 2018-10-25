@@ -37,22 +37,24 @@ class AccountForm(forms.ModelForm):
 
 
 class CheckForm(forms.ModelForm):
+    number = forms.CharField(help_text='Enter the check number')
     amount = forms.CharField(help_text='Enter the dollar amount')
     date = forms.DateField(initial=datetime.date.today)
 
     class Meta:
         model = Check
-        fields = ['amount', 'date']
+        fields = ['number', 'amount', 'date']
 
 
 class CheckEditForm(forms.ModelForm):
+    number = forms.CharField(help_text='Enter the check number')
     amount = forms.CharField(help_text='Enter the dollar amount')
     date = forms.DateField()
-    paid = forms.BooleanField()
+    paid = forms.BooleanField(required=False)
 
     class Meta:
         model = Check
-        fields = ['amount', 'date', 'paid']
+        fields = ['number', 'amount', 'date', 'paid']
 
 
 class CompanyForm(forms.ModelForm):
@@ -64,7 +66,8 @@ class CompanyForm(forms.ModelForm):
     state = forms.ChoiceField(choices=STATE_CHOICES)
     zip_code = forms.CharField(label='Zip Code', help_text='Enter zip code')
     wait_period = forms.CharField(label='Wait Period', initial='10', help_text='Enter wait period between letters')
+    late_fee = forms.CharField(label='Late Fee', initial='50', help_text='Enter the late fee for bounced checks')
 
     class Meta:
         model = Company
-        fields = ['name', 'desc', 'street', 'city', 'state', 'zip_code', 'wait_period']
+        fields = ['name', 'desc', 'street', 'city', 'state', 'zip_code', 'wait_period', 'late_fee']

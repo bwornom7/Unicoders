@@ -5,3 +5,4 @@ django-sass-processor
 psycopg2
 django-heroku
 gunicorn
+xhtml2pdf

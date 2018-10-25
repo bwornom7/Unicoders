@@ -20,6 +20,9 @@
           {{ form.paid.errors }}
         </div>
         <div class='col-sm-12'>
+          {% include 'snippets/field.html' with field=form.number %}
+        </div>
+        <div class='col-sm-12'>
           {% include 'snippets/field.html' with field=form.amount %}
         </div>
         <div class='col-sm-12'>

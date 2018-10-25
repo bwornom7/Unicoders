@@ -31,8 +31,11 @@
         <div class='col-sm-12 col-md-3'>
           {% include 'snippets/field.html' with field=form.zip_code %}
         </div>
-        <div class='col-sm-12'>
+        <div class='col-sm-12 col-md-6'>
           {% include 'snippets/field.html' with field=form.wait_period %}
+        </div>
+        <div class='col-sm-12 col-md-6'>
+          {% include 'snippets/field.html' with field=form.late_fee %}
         </div>
         <div class='col-sm-12'>
           {% include 'snippets/field.html' with field=form.desc %}

@@ -22,4 +22,5 @@ urlpatterns = [
     path('companies/choose/', views.company_choose, name='company_choose'),
     path('companies/<int:company_id>/', views.company_edit, name='company_edit'),
     path('companies/<int:company_id>/register/', views.register, name='register'),
+    path('letters/', views.letter, name='letter'),
 ]
