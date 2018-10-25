@@ -16,7 +16,6 @@ from django.http import HttpResponse
 from io import StringIO, BytesIO
 from xhtml2pdf import pisa
 from django.template.loader import get_template
-from django.template import Context
 
 
 def process_params(objects, params, filters):
