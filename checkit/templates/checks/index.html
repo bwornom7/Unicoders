@@ -6,10 +6,10 @@
 
 <div class='row header-content'>
   <div class='col-sm-12 col-md-6'>
-    <input value='{% if search %}{{search}}{% endif %}' id='search' type='text' placeholder='Search Account Name or Paid To' onkeypress='handlesearch(event)'/>
+    <input value='{% if search %}{{search}}{% endif %}' id='search' type='text' placeholder='Search Account Name' onkeypress='handlesearch(event)'/>
   </div>
   <div class='col-sm-12 col-md-6'>
-    <a href='{% url 'check_new' %}' class='btn btn-primary float-right no-margin'><i class='fas fa-plus'></i> Add New Check</a>
+    <a href='{% url 'letter' %}' class='btn btn-primary float-right no-margin'><i class='fas fa-envelope'></i> Generate Letters</a>
   </div>
   <div class='col-sm-12'><hr/></div>
 </div>
@@ -40,9 +40,11 @@
                 <li><a href='{% url 'check_edit' check.id %}' data-toggle='tooltip' title='Edit Check'>
                   <i class='fas fa-cog'></i>
                 </a></li>
-                <li><a href='{% url 'check_delete' check.id %}' data-toggle='tooltip' title='Delete Check'>
-                  <i class='fas fa-trash'></i>
-                </a></li>
+                {% if user.profile.admin %}
+                  <li><a href='{% url 'check_delete' check.id %}' data-toggle='tooltip' title='Delete Check'>
+                    <i class='fas fa-trash'></i>
+                  </a></li>
+                {% endif %}
               </ul>
             </td>
           </tr>

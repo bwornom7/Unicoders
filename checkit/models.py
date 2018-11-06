@@ -90,12 +90,22 @@ class Check(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True)
+    is_supervisor = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
 
     def full_name(self):
         return '{} {}'.format(self.user.first_name, self.user.last_name)
+
+    def admin(self):
+        return self.user.is_superuser
+
+    def supervisor(self):
+        return self.is_supervisor
+
+    def supervisor_up(self):
+        return self.admin() or self.supervisor()
 
 
 @receiver(post_save, sender=User)

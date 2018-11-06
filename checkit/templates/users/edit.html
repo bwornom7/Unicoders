@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %} {{block.super}} - Edit User {% endblock %}
+
+{% block content %}
+
+<div class='row'>
+  <div class='col-sm-12 col-md-8 col-lg-6 mx-auto form-box'>
+    <h2 class='text-center'>Edit User</h2><hr/>
+
+    <form method='post' >
+      {% csrf_token %}
+
+      {{ form.non_field_errors }}
+
+      <div class='row'>
+        <div class='col-sm-12 col-md-6'>
+          {% include 'snippets/field.html' with field=user_form.first_name %}
+        </div>
+        <div class='col-sm-12 col-md-6'>
+          {% include 'snippets/field.html' with field=user_form.last_name %}
+        </div>
+        <div class='col-sm-12'>
+          {% include 'snippets/field.html' with field=user_form.username %}
+        </div>
+        <div class='col-sm-12'>
+          {% include 'snippets/field.html' with field=user_form.email %}
+        </div>
+        <div class='col-sm-6'>
+          <label for='id_is_superuser'>Admin?</label>
+          {{ user_form.is_superuser }}
+          {{ user_form.is_superuser.errors }}
+        </div>
+        <div class='col-sm-6'>
+          <label for='id_paid'>Supervisor?</label>
+          {{ profile_form.is_supervisor }}
+          {{ profile_form.is_supervisor.errors }}
+        </div>
+        <div class='col-sm-12'>
+          <input class='submit btn btn-primary' type='submit' value='Update User' id='submit'/>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

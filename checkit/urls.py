@@ -23,4 +23,8 @@ urlpatterns = [
     path('companies/<int:company_id>/', views.company_edit, name='company_edit'),
     path('companies/<int:company_id>/register/', views.register, name='register'),
     path('letters/', views.letter, name='letter'),
+    path('users/', views.user_index, name='user_index'),
+    path('users/<int:user_id>/', views.user_edit, name='user_edit'),
+    path('users/<int:user_id>/delete', views.user_delete, name='user_delete'),
+    path('profile/', views.profile, name='profile')
 ]

@@ -1,40 +1,39 @@
-from typing import Dict, Any, Union
-
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
-from checkit.models import Check
-from .decorators import logout_required
+from .decorators import logout_required, admin_required, supervisor_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import *
 from .models import Check, Account, Company
 from django.core.paginator import Paginator
-from django.db.models import Q, QuerySet
+from django.db.models import Q
 from django.http import HttpResponse
 
 from io import StringIO, BytesIO
 from xhtml2pdf import pisa
 from django.template.loader import get_template
 
+from functools import reduce
+from operator import ior
 
-def process_params(objects, params, filters):
+
+def process_params(objects, params, filters, default_sort='-date_created'):
     if params.get('search'):
         search = params.get('search')
-        q = Q(**{filters[0]: search})
-        for f in filters[1:]:
-            q |= Q(**{f: search})
+        q = reduce(ior, [Q(**{x: search}) for x in filters])
         objects = objects.filter(q)
-    objects = objects.order_by(params.get('sort') if params.get('sort') else '-date_created')
+    objects = objects.order_by(params.get('sort') if params.get('sort') else default_sort)
     per = params.get('per') if params.get('per') else 10
     page = params.get('page') if params.get('page') else 1
     paginator = Paginator(objects, per)
     return paginator.get_page(page)
 
 
-def process_context(request, vars):
+def process_context(request, vars, default_sort='-date_created'):
     context = request.dict()
     context.update(vars)
+    if 'sort' not in context: context['sort'] = default_sort
     return context
 
 
@@ -78,6 +77,7 @@ def check_new(request):
 
 
 @login_required
+@supervisor_required
 def check_delete(request, check_id):
     check = get_object_or_404(Check, pk=check_id)
     check.delete()
@@ -123,6 +123,7 @@ def account_edit(request, account_id):
 
 
 @login_required
+@supervisor_required
 def account_delete(request, account_id):
     account = get_object_or_404(Account, pk=account_id)
     account.delete()
@@ -131,6 +132,7 @@ def account_delete(request, account_id):
 
 
 @login_required
+@supervisor_required
 def account_check_index(request, account_id):
     account = get_object_or_404(Account, pk=account_id)
     checks = account.check_set.all()
@@ -158,6 +160,7 @@ def account_check_new(request, account_id):
 
 
 @login_required
+@admin_required
 def company_index(request):
     companies = Company.objects.all()
     companies = process_params(companies, request.GET, ['name__icontains'])
@@ -174,6 +177,7 @@ def company_choose(request):
 
 
 @login_required
+@admin_required
 def company_new(request):
     if request.method == 'POST':
         form = CompanyForm(request.POST)
@@ -188,6 +192,7 @@ def company_new(request):
 
 
 @login_required
+@admin_required
 def company_edit(request, company_id):
     company = get_object_or_404(Company, pk=company_id)
     if request.method == 'POST':
@@ -235,4 +240,49 @@ def letter(request):
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     else:
-        return HttpResponse('Errors')
+        messages.error(request, 'Error generating letters PDF.')
+        return redirect('check_index')
+
+
+@login_required
+@supervisor_required
+def user_index(request):
+    if request.user.profile.admin():
+        users = User.objects.all()
+    else:
+        users = User.objects.filter(profile__company=request.user.profile.company)
+    users = process_params(users, request.GET, ['first_name__icontains', 'last_name__icontains', 'email__icontains'], '-date_joined')
+    context = process_context(request.GET, { 'users': users }, '-date_joined')
+    return render(request, 'users/index.html', context)
+
+
+@login_required
+@supervisor_required
+def user_edit(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    if request.method == 'POST':
+        user_form = UserEditForm(request.POST, instance=user)
+        profile_form = ProfileForm(request.POST, instance=user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'User "{}" successfully updated!'.format(user))
+            return redirect('user_index')
+    else:
+        user_form = UserEditForm(instance=user)
+        profile_form = ProfileForm(instance=user.profile)
+    return render(request, 'users/edit.html', {'user_form': user_form, 'profile_form': profile_form})
+
+
+@login_required
+@admin_required
+def user_delete(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    user.delete()
+    messages.success(request, 'User "{}" has been deleted.'.format(user))
+    return redirect('user_index')
+
+
+@login_required
+def profile(request):
+    pass

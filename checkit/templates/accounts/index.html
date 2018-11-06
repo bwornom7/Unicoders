@@ -43,12 +43,16 @@
                 <li><a href='{% url 'account_check_new' account.id %}' data-toggle='tooltip' title='Add Check'>
                   <i class='fas fa-plus-square'></i>
                 </a></li>
-                <li><a href='{% url 'account_check_index' account.id %}' data-toggle='tooltip' title='View Checks'>
-                  <i class='fas fa-folder'></i>
-                </a></li>
-                <li><a href='{% url 'account_delete' account.id %}' data-toggle='tooltip' title='Delete Account'>
-                  <i class='fas fa-trash'></i>
-                </a></li>
+                {% if user.profile.supervisor %}
+                  <li><a href='{% url 'account_check_index' account.id %}' data-toggle='tooltip' title='View Checks'>
+                    <i class='fas fa-folder'></i>
+                  </a></li>
+                {% endif %}
+                {% if user.profile.admin %}
+                  <li><a href='{% url 'account_delete' account.id %}' data-toggle='tooltip' title='Delete Account'>
+                    <i class='fas fa-trash'></i>
+                  </a></li>
+                {% endif %}
               </ul>
             </td>
           </tr>

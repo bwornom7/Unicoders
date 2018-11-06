@@ -29,7 +29,12 @@
         <ul class='nav-links'>
           <li><a href='{% url 'index' %}' class='no-decoration {% if page == 'index' %}active{% endif %}'><i class='fas fa-university'></i> Home</a></li>
           {% if user.is_authenticated %}
-            <li><a href='{% url 'company_index' %}' class='no-decoration {% if page == 'company_index' %}active{% endif %}'><i class='fas fa-building'></i> Companies</a>            </li>
+            {% if user.profile.admin %}
+              <li><a href='{% url 'company_index' %}' class='no-decoration {% if page == 'company_index' %}active{% endif %}'><i class='fas fa-building'></i> Companies</a></li>
+            {% endif %}
+            {% if user.profile.supervisor_up %}
+              <li><a href='{% url 'user_index' %}' class='no-decoration {% if page == 'user_index' %}active{% endif %}'><i class='fas fa-user'></i> Users</a></li>
+            {% endif %}
             <li><a href='{% url 'account_index' %}' class='no-decoration {% if page == 'account_index' %}active{% endif %}'><i class='fas fa-address-book'></i> Accounts</a></li>
             <li><a href='{% url 'check_index' %}' class='no-decoration {% if page == 'check_index' %}active{% endif %}'><i class='fas fa-credit-card'></i> Checks</a></li>
           {% endif %}
@@ -54,7 +59,12 @@
           <ul class='nav-links'>
             <li><a href='{% url 'index' %}' class='no-decoration {% if page == 'index' %}active{% endif %}'><i class='fas fa-university'></i> Home</a></li>
             {% if user.is_authenticated %}
-              <li><a href='{% url 'company_index' %}' class='no-decoration {% if page == 'company_index' %}active{% endif %}'><i class='fas fa-building'></i> Companies</a></li>
+              {% if user.profile.admin %}
+                <li><a href='{% url 'company_index' %}' class='no-decoration {% if page == 'company_index' %}active{% endif %}'><i class='fas fa-building'></i> Companies</a></li>
+              {% endif %}
+              {% if user.profile.supervisor_up %}
+                <li><a href='{% url 'user_index' %}' class='no-decoration {% if page == 'user_index' %}active{% endif %}'><i class='fas fa-user'></i> Users</a></li>
+              {% endif %}
               <li><a href='{% url 'account_index' %}' class='no-decoration {% if page == 'account_index' %}active{% endif %}'><i class='fas fa-address-book'></i> Accounts</a></li>
               <li><a href='{% url 'check_index' %}' class='no-decoration {% if page == 'check_index' %}active{% endif %}'><i class='fas fa-credit-card'></i> Checks</a></li>
             {% endif %}

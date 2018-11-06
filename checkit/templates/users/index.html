@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %} {{block.super}} - Users {% endblock %}
+
+{% block content %}
+
+<div class='row'>
+  <div class='col-sm-12 col-md-6'>
+    <input value='{% if search %}{{search}}{% endif %}' id='search' type='text' placeholder='Search Account Name or Email' onkeypress='handlesearch(event)'/>
+  </div>
+  <div class='col-sm-12'><hr/></div>
+</div>
+
+<div class='row'>
+  <div class='col-sm-12'>
+    <table class='table data-table'>
+      <thead>
+        <tr>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='first_name' heading='Name' %}</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='profile__company__name' heading='Company' %}</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='email' heading='Email' %}</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='date_joined' heading='Date Joined' %}</th>
+          <th scope='col'>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+          <tr>
+            <td>{{ u.profile.full_name }}</td>
+            <td>{{ u.profile.company.name }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.date_joined}}</td>
+            <td>
+              <ul class='actions'>
+                <li><a href='{% url 'user_edit' u.id %}' data-toggle='tooltip' title='Edit User'>
+                  <i class='fas fa-cog'></i>
+                </a></li>
+                {% if user.profile.admin %}
+                  <li><a href='{% url 'user_delete' u.id %}' data-toggle='tooltip' title='Delete User'>
+                    <i class='fas fa-trash'></i>
+                  </a></li>
+                {% endif %}
+              </ul>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            {% if search %}
+              <td colspan='5'>Your search "{{search}}" did not match any accounts.</td>
+            {% else %}
+              <td colspan='5'>No users found.</td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% include 'snippets/pagination.html' with objects=users %}
+  </div>
+</div>
+
+{% endblock %}

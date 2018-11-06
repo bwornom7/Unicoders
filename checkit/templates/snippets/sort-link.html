@@ -7,9 +7,5 @@
     <a class='sort-link active' href='?sort={{ '-'|add:field }}'><i class='fas fa-sort-up'></i> {{ heading }}</a>
   {% endif %}
 {% else %}
-  {% if not sort and field == 'date_created' %}
-    <a class='sort-link active' href='?sort={{ '-'|add:field }}'><i class='fas fa-sort-up'></i> {{ heading }}</a>
-  {% else %}
-    <a class='sort-link' href='?sort={{ field }}'><i class='fas fa-sort'></i> {{ heading }}</a>
-  {% endif %}
+  <a class='sort-link' href='?sort={{ field }}'><i class='fas fa-sort'></i> {{ heading }}</a>
 {% endif %}
