@@ -152,7 +152,7 @@ def account_check_new(request, account_id):
             check.account = account
             check.save()
             messages.success(request, 'Successfully added new check!')
-            return redirect(account_check_index, account.id)
+            return redirect(account_index)
     else:
         form = CheckForm()
 
@@ -206,6 +206,15 @@ def company_edit(request, company_id):
     return render(request, 'companies/new.html', {'form': form, 'company': company})
 
 
+@login_required
+@admin_required
+def company_delete(request, company_id):
+    company = get_object_or_404(Company, pk=company_id)
+    company.delete()
+    messages.success(request, 'Company {} has been deleted.'.format(company))
+    return redirect('company_index')
+
+
 @logout_required
 def register(request, company_id):
     company = get_object_or_404(Company, pk=company_id)
@@ -232,7 +241,11 @@ def letter(request):
     checks = Check.objects.filter(user=request.user)
     company = request.user.profile.company
 
-    template = get_template('letters/letter1.html')
+    if not len([x.current_letter() for x in checks if x.current_letter() >= 1]):
+        messages.info(request, 'No letters to generate.')
+        return redirect('check_index')
+
+    template = get_template('letters/letters.html')
     context = {'checks': checks, 'company': company, 'user': request.user}
     html = template.render(context)
     result = BytesIO()

@@ -205,6 +205,15 @@ header {
     left: -1px;
     box-shadow: #AAAAAA 0px 6px 16px 0px;
   }
+
+  .actions {
+    li {
+      padding: 0 0.8em;
+      &:first-child {
+        padding-left: 0;
+      }
+    }
+  }
 }
 
 input[type=text], input[type=password], input[type=email] {
@@ -313,6 +322,9 @@ label {
   tbody {
     .row-success td {
       background-color: #BBFFBB;
+    }
+    .row-warning td {
+      background-color: #FFBBBB;
     }
     tr {
       box-shadow: #AAAAAA 0px 2px 4px 0px;

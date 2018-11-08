@@ -29,12 +29,12 @@
       </thead>
       <tbody>
         {% for check in checks %}
-          <tr class='{% if check.paid %}row-success{% endif %}'>
+          <tr class='{{ check.row_status }}'>
             <td>{{ check.account.name }}</td>
             <td>{{ check.amount }}</td>
             <td>{{ check.amount_paid }}</td>
             <td>{{ check.date }}</td>
-            <td>{{ check.date_created }}</td>
+            <td>{{ check.date_created.date }}</td>
             <td>
               <ul class='actions'>
                 <li><a href='{% url 'check_edit' check.id %}' data-toggle='tooltip' title='Edit Check'>

@@ -1,48 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Checks</title>
-  <style>
-    h1 {
-      text-align: center;
-    }
-    p {
-      margin: 0;
-      -pdf-keep-with-next: true;
-    }
-  </style>
-</head>
-<body>
-  {% for check in checks %}
-    <h1>NOTICE OF DISHONORED CHECK</h1>
-
-    <br>
-    <p>{{ company.street }}</p>
-    <p>{{ company.city }}, {{ company.state }} {{ company.zip_code }}</p>
-    <br>
-    <p>{% now 'm-d-Y' %}</p>
-    <br>
-    <p>{{ check.account.name }}</p>
-    <p>{{ check.account.street }}, {{ check.account.state }} {{ check.account.zip_code }}</p>
-    <br>
-    <p>RE: Notice of Dishonored Check</p>
-    <br>
-    <p>Dear {{ check.account.name }}:</p>
-    <p>I am writing to inform you that check #{{ check.number }}, dated {{ check.date }}, in the amount of ${{ check.amount }} made payable to {{ company.name }} has been returned to me.</p>
-    <p>I realize that such mishaps can occur and am confident that you will rectify this matter immediately. Accordingly, I ask that you please mail (or deliver in person) a new payment in the original amount plus the bank’s returned-check fee of ${{ company.late_fee }} to the following address:</p>
-    <br>
-    <p>{{ company.street }}</p>
-    <p>{{ company.city }}, {{ company.state }} {{ company.zip_code }}</p>
-    <br>
-    <p>Please make your payment in cash, certified check, cashier’s check or money order only. It is imperative that you do so without delay. If funds are now available in your account and you would like me to redeposit the check, please let me know as soon as possible. You may contact me at [Your Phone Number]. If you have already sent replacement funds, please disregard this letter.</p>
-    <p>Thank you for your prompt attention to this matter.</p>
-    <br>
-    <p>Sincerely,</p>
-    <p>{{ user.profile.full_name }}</p>
-
-    <div>
-      <pdf:nextpage />
-    </div>
-  {% endfor %}
-</body>
-</html>
+<h1>NOTICE OF DISHONORED CHECK</h1>
+<br>
+<p>{{ company.street }}</p>
+<p>{{ company.city }}, {{ company.state }} {{ company.zip_code }}</p>
+<br>
+<p>{% now 'm-d-Y' %}</p>
+<br>
+<p>{{ check.account.name }}</p>
+<p>{{ check.account.street }}, {{ check.account.state }} {{ check.account.zip_code }}</p>
+<br>
+<p>RE: Notice of Dishonored Check</p>
+<br>
+<p>Dear {{ check.account.name }}:</p>
+<p>I am writing to inform you that check #{{ check.number }}, dated {{ check.date }}, in the amount of ${{ check.amount }} made payable to {{ company.name }} has been returned to me.</p>
+<p>I realize that such mishaps can occur and am confident that you will rectify this matter immediately. Accordingly, I ask that you please mail (or deliver in person) a new payment in the original amount plus the bank’s returned-check fee of ${{ company.late_fee }} to the following address:</p>
+<br>
+<p>{{ company.street }}</p>
+<p>{{ company.city }}, {{ company.state }} {{ company.zip_code }}</p>
+<br>
+<p>Please make your payment in cash, certified check, cashier’s check or money order only. It is imperative that you do so without delay. If funds are now available in your account and you would like me to redeposit the check, please let me know as soon as possible. You may contact me at [Your Phone Number]. If you have already sent replacement funds, please disregard this letter.</p>
+<p>Thank you for your prompt attention to this matter.</p>
+<br>
+<p>Sincerely,</p>
+<p>{{ user.profile.full_name }}</p>

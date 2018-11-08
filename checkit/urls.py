@@ -21,6 +21,7 @@ urlpatterns = [
     path('companies/new/', views.company_new, name='company_new'),
     path('companies/choose/', views.company_choose, name='company_choose'),
     path('companies/<int:company_id>/', views.company_edit, name='company_edit'),
+    path('companies/<int:company_id>/delete', views.company_delete, name='company_delete'),
     path('companies/<int:company_id>/register/', views.register, name='register'),
     path('letters/', views.letter, name='letter'),
     path('users/', views.user_index, name='user_index'),

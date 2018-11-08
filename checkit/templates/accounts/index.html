@@ -34,7 +34,7 @@
             <td>{{ account.street }}</td>
             <td>{{ account.number }}</td>
             <td>{{ account.route }}</td>
-            <td>{{ account.date_created }}</td>
+            <td>{{ account.date_created.date }}</td>
             <td>
               <ul class='actions'>
                 <li><a href='{% url 'account_edit' account.id %}' data-toggle='tooltip' title='Edit Account'>

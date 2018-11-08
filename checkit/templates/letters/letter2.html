@@ -1,0 +1,20 @@
+<h1>FINAL NOTICE OF DISHONORED CHECK</h1>
+<br>
+<p>{{ company.street }}</p>
+<p>{{ company.city }}, {{ company.state }} {{ company.zip_code }}</p>
+<br>
+<p>{% now 'm-d-Y' %}</p>
+<br>
+<p>{{ check.account.name }}</p>
+<p>{{ check.account.street }}, {{ check.account.state }} {{ check.account.zip_code }}</p>
+<br>
+<p>RE: Final Notice of Dishonored Check</p>
+<br>
+<p>Dear {{ check.account.name }}:</p>
+<p>I am writing again regarding check #{{ check.number }}, which, as you know, was returned to me.</p>
+<p>I am disappointed that I have not heard from you since my initial letter was sent on {{ check.letter1_date }}, in which I asked you to replace the funds or make other payment arrangements.</p>
+<p>Unless I hear from you or receive a new payment within {{ company.wait_period }} days of the date of this letter, I will pursue appropriate legal action. I prefer to avoid such a remedy, as it is not the best solution for either of us.</p>
+<p>I hope to hear from you soon.</p>
+<br>
+<p>Sincerely,</p>
+<p>{{ user.profile.full_name }}</p>

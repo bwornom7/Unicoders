@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import RegexValidator
+import datetime
 
 
 class Company(models.Model):
@@ -18,7 +19,7 @@ class Company(models.Model):
                        code='invalid_zip_code')
     ])
     late_fee = models.DecimalField(decimal_places=2, max_digits=10, default=50, null=True)
-    date_created = models.DateField(auto_now_add=True, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -52,7 +53,7 @@ class Account(models.Model):
                        message='Zip code must be five digits.',
                        code='invalid_zip_code')
     ])
-    date_created = models.DateField(auto_now_add=True, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -73,13 +74,41 @@ class Check(models.Model):
     paid = models.BooleanField(default=False)
     amount_paid = models.DecimalField(decimal_places=2, max_digits=10, default=0, null=True)
     date = models.DateField(blank=True, null=True)
-    date_created = models.DateField(auto_now_add=True, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     letter1_date = models.DateField(null=True)
     letter2_date = models.DateField(null=True)
     letter3_date = models.DateField(null=True)
 
     def __str__(self):
         return '{}: {}'.format(self.account.name, self.amount)
+
+    def current_letter(self):
+        delta = (datetime.datetime.now().date() - self.date_created.date()).days
+        wait_period = self.user.profile.company.wait_period
+        if self.paid:
+            return 0
+        if not self.letter1_date and delta >= wait_period:
+            return 1
+        elif not self.letter2_date and delta >= wait_period * 2:
+            return 2
+        elif not self.letter3_date and delta >= wait_period * 3:
+            return 3
+        return -1
+
+    def current_letter_template(self):
+        return 'letters/letter{}.html'.format(self.current_letter())
+
+    def row_status(self):
+        letter = self.current_letter()
+        if letter == 0:
+            return 'row-success'
+        if 1 <= letter <= 3:
+            return 'row-warning'
+
+    def next_letter(self):
+        letter = self.current_letter()
+        setattr(self, 'letter{}_date'.format(letter), datetime.datetime.now().date())
+        self.save()
 
     class Meta:
         indexes = [

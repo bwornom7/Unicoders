@@ -6396,6 +6396,10 @@ header {
     top: -1px;
     left: -1px;
     box-shadow: #AAAAAA 0px 6px 16px 0px; }
+  .company-card .actions li {
+    padding: 0 0.8em; }
+    .company-card .actions li:first-child {
+      padding-left: 0; }
 
 input[type=text], input[type=password], input[type=email] {
   width: 100%;
@@ -6477,6 +6481,8 @@ label {
     background-color: inherit; }
   .data-table tbody .row-success td {
     background-color: #BBFFBB; }
+  .data-table tbody .row-warning td {
+    background-color: #FFBBBB; }
   .data-table tbody tr {
     box-shadow: #AAAAAA 0px 2px 4px 0px;
     border-radius: .5em;

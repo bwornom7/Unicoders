@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checks</title>
+  <style>
+    h1 {
+      text-align: center;
+    }
+    p {
+      margin: 0;
+      -pdf-keep-with-next: true;
+    }
+  </style>
+</head>
+<body>
+  {% for check in checks %}
+    {% if check.current_letter >= 1 %}
+      {% include check.current_letter_template with check=check company=company %}
+      {{ check.next_letter }}
+      <div>
+        <pdf:nextpage />
+      </div>
+    {% endif %}
+  {% endfor %}
+</body>
+</html>
