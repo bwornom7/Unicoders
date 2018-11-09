@@ -87,16 +87,19 @@ class Check(models.Model):
         wait_period = self.user.profile.company.wait_period
         if self.paid:
             return 0
-        if not self.letter1_date and delta >= wait_period:
+        if not self.letter1_date:
             return 1
-        elif not self.letter2_date and delta >= wait_period * 2:
+        elif not self.letter2_date and delta >= wait_period:
             return 2
-        elif not self.letter3_date and delta >= wait_period * 3:
+        elif not self.letter3_date and delta >= wait_period * 2:
             return 3
         return -1
 
     def current_letter_template(self):
-        return 'letters/letter{}.html'.format(self.current_letter())
+        letter = self.current_letter()
+        setattr(self, 'letter{}_date'.format(letter), datetime.datetime.now().date())
+        self.save()
+        return 'letters/letter{}.html'.format(letter)
 
     def row_status(self):
         letter = self.current_letter()
@@ -104,11 +107,6 @@ class Check(models.Model):
             return 'row-success'
         if 1 <= letter <= 3:
             return 'row-warning'
-
-    def next_letter(self):
-        letter = self.current_letter()
-        setattr(self, 'letter{}_date'.format(letter), datetime.datetime.now().date())
-        self.save()
 
     class Meta:
         indexes = [

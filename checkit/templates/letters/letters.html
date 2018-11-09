@@ -16,7 +16,6 @@
   {% for check in checks %}
     {% if check.current_letter >= 1 %}
       {% include check.current_letter_template with check=check company=company %}
-      {{ check.next_letter }}
       <div>
         <pdf:nextpage />
       </div>

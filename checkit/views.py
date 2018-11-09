@@ -71,12 +71,6 @@ def check_edit(request, check_id):
 
 
 @login_required
-def check_new(request):
-    messages.info(request, 'Please select an account to add a check.')
-    return redirect(account_index)
-
-
-@login_required
 @supervisor_required
 def check_delete(request, check_id):
     check = get_object_or_404(Check, pk=check_id)
