@@ -16,7 +16,9 @@ from django.template.loader import get_template
 
 from functools import reduce
 from operator import ior
+import logging
 
+logger = logging.getLogger(__name__)
 
 def process_params(objects, params, filters, default_sort='-date_created'):
     if params.get('search'):
@@ -45,6 +47,7 @@ def index(request):
 def logout_user(request):
     logout(request)
     messages.success(request, 'You have successfully logged out.')
+    logger.info('User {} successfully logged out'.format(request.user))
     return redirect('index')
 
 
@@ -63,6 +66,7 @@ def check_edit(request, check_id):
         form = CheckEditForm(request.POST, instance=check)
         if form.is_valid():
             form.save()
+            logger.info('Check #{} has been edited'.format(check.number))
             messages.success(request, 'Check successfully updated!')
             return redirect('check_index')
     else:
@@ -75,6 +79,7 @@ def check_edit(request, check_id):
 def check_delete(request, check_id):
     check = get_object_or_404(Check, pk=check_id)
     check.delete()
+    logger.info('Check #{} has been deleted'.format(check.number))
     messages.success(request, 'Check has been deleted.')
     return redirect('check_index')
 
@@ -95,6 +100,7 @@ def account_new(request):
             account = form.save(commit=False)
             account.company = request.user.profile.company
             account.save()
+            logger.info('Successfully created new account')
             messages.success(request, 'Successfully created new account!')
             if request.POST.get('again'):
                 return redirect('account_new')
@@ -111,6 +117,7 @@ def account_edit(request, account_id):
         form = AccountForm(request.POST, instance=account)
         if form.is_valid():
             form.save()
+            logger.info('Account "{}" successfully updated'.format(account.name))
             messages.success(request, 'Account "{}" successfully updated!'.format(account.name))
             return redirect('account_index')
     else:
@@ -123,6 +130,7 @@ def account_edit(request, account_id):
 def account_delete(request, account_id):
     account = get_object_or_404(Account, pk=account_id)
     account.delete()
+    logger.info('Account "{}" has been deleted.'.format(account.name))
     messages.success(request, 'Account "{}" has been deleted.'.format(account.name))
     return redirect('account_index')
 
@@ -147,6 +155,7 @@ def account_check_new(request, account_id):
             check.user = request.user
             check.account = account
             check.save()
+            logger.info('Successfully added check #{}'.format(check.number))
             messages.success(request, 'Successfully added new check!')
             if request.POST.get('again'):
                 return redirect(account_check_new, account_id)
@@ -181,6 +190,7 @@ def company_new(request):
         form = CompanyForm(request.POST)
         if form.is_valid():
             form.save()
+            logger.info('Successfully added company: {}'.format(company))
             messages.success(request, 'Successfully added company!')
             return redirect(company_index)
     else:
@@ -197,6 +207,7 @@ def company_edit(request, company_id):
         form = CompanyForm(request.POST, instance=company)
         if form.is_valid():
             form.save()
+            logger.info('Company "{}" successfully updated'.format(company))
             messages.success(request, 'Company "{}" successfully updated!'.format(company))
             return redirect('company_index')
     else:
@@ -209,6 +220,7 @@ def company_edit(request, company_id):
 def company_delete(request, company_id):
     company = get_object_or_404(Company, pk=company_id)
     company.delete()
+    logger.info('Company {} has been deleted.'.format(company))
     messages.success(request, 'Company {} has been deleted.'.format(company))
     return redirect('company_index')
 
@@ -226,6 +238,7 @@ def register(request, company_id):
 
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
+            logger.info('Account {} created'.format(account.name))
             messages.success(request, 'Account successfully created!')
             return redirect('index')
     else:
@@ -249,6 +262,7 @@ def letter(request):
     result = BytesIO()
     pdf = pisa.pisaDocument(StringIO(html), dest=result)
     if not pdf.err:
+        logger.info('Letter generated')
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     else:
         messages.error(request, 'Error generating letters PDF.')
@@ -277,6 +291,7 @@ def user_edit(request, user_id):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            logger.info('User "{}" successfully updated'.format(user))
             messages.success(request, 'User "{}" successfully updated!'.format(user))
             return redirect('user_index')
     else:
@@ -290,6 +305,7 @@ def user_edit(request, user_id):
 def user_delete(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     user.delete()
+    logger.info('User "{}" has been deleted.'.format(user))
     messages.success(request, 'User "{}" has been deleted.'.format(user))
     return redirect('user_index')
 
