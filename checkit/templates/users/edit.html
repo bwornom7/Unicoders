@@ -4,6 +4,7 @@
 
 {% block content %}
 
+{% include 'snippets/back_link.html' with back_url='user_index' page_name='All Users' %}
 <div class='row'>
   <div class='col-sm-12 col-md-8 col-lg-6 mx-auto form-box'>
     <h2 class='text-center'>Edit User</h2><hr/>
@@ -37,7 +38,7 @@
           {{ profile_form.is_supervisor.errors }}
         </div>
         <div class='col-sm-12'>
-          <input class='submit btn btn-primary' type='submit' value='Update User' id='submit'/>
+          <input class='submit btn btn-primary btn-block' type='submit' value='Update User' id='submit'/>
         </div>
       </div>
     </form>

@@ -96,6 +96,8 @@ def account_new(request):
             account.company = request.user.profile.company
             account.save()
             messages.success(request, 'Successfully created new account!')
+            if request.POST.get('again'):
+                return redirect('account_new')
             return redirect('account_index')
     else:
         form = AccountForm()
@@ -146,6 +148,8 @@ def account_check_new(request, account_id):
             check.account = account
             check.save()
             messages.success(request, 'Successfully added new check!')
+            if request.POST.get('again'):
+                return redirect(account_check_new, account_id)
             return redirect(account_index)
     else:
         form = CheckForm()
