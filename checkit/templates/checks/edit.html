@@ -15,11 +15,13 @@
       {{ form.non_field_errors }}
 
       <div class='row'>
-        <div class='col-sm-12'>
-          <label for='id_paid'>Paid?</label>
-          {{ form.paid }}
-          {{ form.paid.errors }}
-        </div>
+        {% if user.profile.supervisor_up %}
+          <div class='col-sm-12'>
+            <label for='id_paid'>Paid?</label>
+            {{ form.paid }}
+            {{ form.paid.errors }}
+          </div>
+        {% endif %}
         <div class='col-sm-12'>
           {% include 'snippets/field.html' with field=form.number %}
         </div>
@@ -30,6 +32,15 @@
           <label for='id_date'>Date:</label>
           {{ form.date }}
           {{ form.date.errors }}
+        </div>
+        <div class='col-sm-12 col-md-4'>
+          <a href='{% url 'check_letter1' check.id %}' class='btn btn-secondary btn-block'>Letter 1</a>
+        </div>
+        <div class='col-sm-12 col-md-4'>
+          <a href='{% url 'check_letter2' check.id %}' class='btn btn-secondary btn-block'>Letter 2</a>
+        </div>
+        <div class='col-sm-12 col-md-4'>
+          <a href='{% url 'check_letter3' check.id %}' class='btn btn-secondary btn-block'>Letter 3</a>
         </div>
         <div class='col-sm-12'>
           <input class='submit btn btn-primary btn-block' type='submit' value='Update Check' id='submit'/>

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %} {{block.super}} - Pay Check {% endblock %}
+
+{% block content %}
+
+{% include 'snippets/back_link.html' with back_url='check_index' page_name='All Checks' %}
+<div class='row'>
+  <div class='col-sm-12 col-md-8 col-lg-6 mx-auto form-box'>
+    <h2 class='text-center'>Pay Check</h2><hr/>
+
+    <form method='post' >
+      {% csrf_token %}
+
+      {{ form.non_field_errors }}
+
+      <div class='row'>
+        <div class='col-sm-12'>
+          <p class='no-margin bg-danger'>+ Check Amount: ${{ check.amount }}</p>
+          <p class='no-margin bg-danger'>+ Late Fee: ${{ check.user.profile.company.late_fee }}</p>
+          {% if check.amount_paid %}<p class='no-margin bg-success'>- Already Paid: ${{ check.amount_paid }}</p>{% endif %}
+          <hr>
+          <p>Total Due: {{ check.amount_due }}</p>
+        </div>
+        <div class='col-sm-12'>
+          {% include 'snippets/field.html' with field=form.amount %}
+        </div>
+        <div class='col-sm-12'>
+          <input class='submit btn btn-primary btn-block' type='submit' value='Pay Check'/>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

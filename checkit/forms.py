@@ -76,6 +76,10 @@ class CheckEditForm(forms.ModelForm):
         fields = ['number', 'amount', 'date', 'paid']
 
 
+class CheckPayForm(forms.Form):
+    amount = forms.DecimalField(help_text='Enter the amount paid')
+
+
 class CompanyForm(forms.ModelForm):
     name = forms.CharField(help_text='Enter the company\'s name')
     desc = forms.CharField(label='Description', help_text='Enter a brief description for this company',

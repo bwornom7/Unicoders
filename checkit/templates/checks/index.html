@@ -40,6 +40,11 @@
                 <li><a href='{% url 'check_edit' check.id %}' data-toggle='tooltip' title='Edit Check'>
                   <i class='fas fa-cog'></i>
                 </a></li>
+                {% if not check.paid %}
+                  <li><a href='{% url 'check_pay' check.id %}' data-toggle='tooltip' title='Pay Check'>
+                    <i class='fas fa-shopping-cart'></i>
+                  </a></li>
+                {% endif %}
                 {% if user.profile.admin %}
                   <li><a href='{% url 'check_delete' check.id %}' data-toggle='tooltip' title='Delete Check'>
                     <i class='fas fa-trash'></i>

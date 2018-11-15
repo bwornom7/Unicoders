@@ -108,6 +108,18 @@ class Check(models.Model):
         if 1 <= letter <= 3:
             return 'row-warning'
 
+    def amount_due(self):
+        return self.user.profile.company.late_fee + self.amount - self.amount_paid
+
+    def pay(self, amount):
+        ret = 'Successfully paid ${:.2f}'.format(amount)
+        self.amount_paid += amount
+        if self.amount_paid >= self.user.profile.company.late_fee + self.amount:
+            self.paid = True
+            ret = 'Successfully paid off check!'
+        self.save()
+        return ret
+
     class Meta:
         indexes = [
             models.Index(fields=['date_created'], name='check_date_created_idx')

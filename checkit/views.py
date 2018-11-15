@@ -20,6 +20,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def process_params(objects, params, filters, default_sort='-date_created'):
     if params.get('search'):
         search = params.get('search')
@@ -37,6 +38,17 @@ def process_context(request, vars, default_sort='-date_created'):
     context.update(vars)
     if 'sort' not in context: context['sort'] = default_sort
     return context
+
+
+def pdf_from_html(request, html, error_redirect, error_args):
+    result = BytesIO()
+    pdf = pisa.pisaDocument(StringIO(html), dest=result)
+    if not pdf.err:
+        logger.info('Letter 1 generated')
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    else:
+        messages.warning(request, 'Error generating letter 1 PDF.')
+        return redirect(error_redirect, **error_args)
 
 
 def index(request):
@@ -72,6 +84,20 @@ def check_edit(request, check_id):
     else:
         form = CheckEditForm(instance=check)
     return render(request, 'checks/edit.html', {'form': form, 'check': check})
+
+
+@login_required
+def check_pay(request, check_id):
+    check = get_object_or_404(Check, pk=check_id)
+    if request.method == 'POST':
+        form = CheckPayForm(request.POST)
+        if form.is_valid():
+            message = check.pay(form.cleaned_data['amount'])
+            messages.success(request, message)
+            return redirect('check_index')
+    else:
+        form = CheckPayForm()
+    return render(request, 'checks/pay.html', {'form': form, 'check': check})
 
 
 @login_required
@@ -262,11 +288,41 @@ def letter(request):
     result = BytesIO()
     pdf = pisa.pisaDocument(StringIO(html), dest=result)
     if not pdf.err:
-        logger.info('Letter generated')
+        logger.info('Letters generated')
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     else:
         messages.error(request, 'Error generating letters PDF.')
         return redirect('check_index')
+
+
+@login_required
+def check_letter1(request, check_id):
+    check = get_object_or_404(Check, pk=check_id)
+    company = request.user.profile.company
+    template = get_template('letters/letter1.html')
+    context = {'check': check, 'company': company, 'user': request.user}
+    html = template.render(context)
+    return pdf_from_html(request, html, check_edit, {'check_id': check_id})
+
+
+@login_required
+def check_letter2(request, check_id):
+    check = get_object_or_404(Check, pk=check_id)
+    company = request.user.profile.company
+    template = get_template('letters/letter2.html')
+    context = {'check': check, 'company': company, 'user': request.user}
+    html = template.render(context)
+    return pdf_from_html(request, html, check_edit, {'check_id': check_id})
+
+
+@login_required
+def check_letter3(request, check_id):
+    check = get_object_or_404(Check, pk=check_id)
+    company = request.user.profile.company
+    template = get_template('letters/letter3.html')
+    context = {'check': check, 'company': company, 'user': request.user}
+    html = template.render(context)
+    return pdf_from_html(request, html, check_edit, {'check_id': check_id})
 
 
 @login_required
