@@ -6,3 +6,4 @@ psycopg2
 django-heroku
 gunicorn
 xhtml2pdf
+leather

@@ -17,6 +17,7 @@ from django.template.loader import get_template
 from functools import reduce
 from operator import ior
 import logging
+import leather
 
 logger = logging.getLogger(__name__)
 
@@ -403,6 +404,32 @@ def user_delete(request, user_id):
     logger.info('User "{}" has been deleted.'.format(user))
     messages.success(request, 'User "{}" has been deleted.'.format(user))
     return redirect('user_index')
+
+
+@login_required
+def report(request):
+    checks = Check.objects.filter(user=request.user)
+
+    #generate chart using python lib and checks
+    paid = 0
+    notPaid = 0
+
+    for x in checks:
+        if x.paid:
+            paid += 1
+        else:
+            notPaid += 1
+
+    data = [
+        (paid, 'Checks Paid'),
+        (notPaid, 'Checks Not Paid')
+    ]
+
+    chart = leather.Chart('Checks Processed by CheckIt')
+    chart.add_bars(data)
+    chart.to_svg('checkit/static/img/bars.svg')
+
+    return render(request, 'report/report.html')
 
 
 @login_required
