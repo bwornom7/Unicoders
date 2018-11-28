@@ -84,7 +84,7 @@ class Check(models.Model):
 
     def current_letter(self):
         delta = (datetime.datetime.now().date() - self.date_created.date()).days
-        wait_period = self.user.profile.company.wait_period
+        wait_period = self.account.company.wait_period
         if self.paid:
             return 0
         if not self.letter1_date:
@@ -109,12 +109,12 @@ class Check(models.Model):
             return 'row-warning'
 
     def amount_due(self):
-        return self.user.profile.company.late_fee + self.amount - self.amount_paid
+        return self.account.company.late_fee + self.amount - self.amount_paid
 
     def pay(self, amount):
         ret = 'Successfully paid ${:.2f}'.format(amount)
         self.amount_paid += amount
-        if self.amount_paid >= self.user.profile.company.late_fee + self.amount:
+        if self.amount_paid >= self.account.company.late_fee + self.amount:
             self.paid = True
             ret = 'Successfully paid off check!'
         self.save()
@@ -145,6 +145,23 @@ class Profile(models.Model):
 
     def supervisor_up(self):
         return self.admin() or self.supervisor()
+
+    def simulate(self, company):
+        self.company = company
+        self.save()
+
+    def stop_simulate(self):
+        self.company = None
+        self.save()
+
+    def admin_simulating(self):
+        return self.admin() and self.company is not None
+
+    def admin_not_simulating(self):
+        return self.admin() and self.company is None
+
+    def regular(self):
+        return (not self.admin()) or self.admin_simulating()
 
 
 @receiver(post_save, sender=User)

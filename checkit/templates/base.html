@@ -10,52 +10,26 @@
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.3.1/css/all.css' integrity='sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU' crossorigin='anonymous'>
     <link rel='stylesheet' type='text/css' href='{% static 'css/keyframes.css' %}'/>
     <link rel='stylesheet' type='text/css' href='{% sass_src 'css/app.scss' %}'/>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel='shortcut icon' type='image/png' href='{% static 'img/favicon.png' %}'/>
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js'></script>
     <script src='{% static 'js/app.js' %}'></script>
   </head>
 
   <body>
-    <header class='d-md-none'>
-      <div class="navTrigger">
-        <i></i>
-        <i></i>
-        <i></i>
-      </div>
-      <p class='welcome-text float-right'>Welcome, {% if user.is_authenticated %}{{ user }}{% else %}Guest{% endif %}!</p>
-      <nav class='navContent'>
-        <h3>Pages</h3>
-        <ul class='nav-links'>
-          <li><a href='{% url 'index' %}' class='no-decoration {% if page == 'index' %}active{% endif %}'><i class='fas fa-university'></i> Home</a></li>
-          {% if user.is_authenticated %}
-            {% if user.profile.admin %}
-              <li><a href='{% url 'company_index' %}' class='no-decoration {% if page == 'company_index' %}active{% endif %}'><i class='fas fa-building'></i> Companies</a></li>
-            {% endif %}
-            {% if user.profile.supervisor_up %}
-              <li><a href='{% url 'user_index' %}' class='no-decoration {% if page == 'user_index' %}active{% endif %}'><i class='fas fa-user'></i> Users</a></li>
-            {% endif %}
-            <li><a href='{% url 'account_index' %}' class='no-decoration {% if page == 'account_index' %}active{% endif %}'><i class='fas fa-address-book'></i> Accounts</a></li>
-            <li><a href='{% url 'check_index' %}' class='no-decoration {% if page == 'check_index' %}active{% endif %}'><i class='fas fa-credit-card'></i> Checks</a></li>
-          {% endif %}
-        </ul>
-
-        <h3>Profile</h3>
-        <ul class='nav-links'>
-          <li>
-            {% if user.is_authenticated %}
-              <a class='no-decoration' href='{% url 'logout' %}'><i class='fas fa-paper-plane'></i> Log Out</a>
-            {% else %}
-              <a class='no-decoration {% if page == 'login' %}active{% endif %}' href='{% url 'login' %}'><i class='fas fa-user-circle'></i> Log In</a>
-            {% endif %}
-          </li>
-        </ul>
-      </nav>
-    </header>
-
-    <header class='d-none d-md-block'>
-      <div class='container'>
-        <nav>
+    <div id='full-content-container'>
+      <header class='d-md-none'>
+        <div class="navTrigger">
+          <i></i>
+          <i></i>
+          <i></i>
+        </div>
+        <p class='welcome-text float-right'>{% if user.is_authenticated %}{{ user }}{% else %}Guest{% endif %}</p>
+        <nav class='navContent'>
+          <h3>Pages</h3>
           <ul class='nav-links'>
             <li><a href='{% url 'index' %}' class='no-decoration {% if page == 'index' %}active{% endif %}'><i class='fas fa-university'></i> Home</a></li>
             {% if user.is_authenticated %}
@@ -69,9 +43,9 @@
               <li><a href='{% url 'check_index' %}' class='no-decoration {% if page == 'check_index' %}active{% endif %}'><i class='fas fa-credit-card'></i> Checks</a></li>
             {% endif %}
           </ul>
-            
-          <ul class='float-right nav-links'>
-            <li><p>Welcome, {% if user.is_authenticated %}{{ user }}{% else %}Guest{% endif %}!</p></li>
+
+          <h3>Profile</h3>
+          <ul class='nav-links'>
             <li>
               {% if user.is_authenticated %}
                 <a class='no-decoration' href='{% url 'logout' %}'><i class='fas fa-paper-plane'></i> Log Out</a>
@@ -81,28 +55,96 @@
             </li>
           </ul>
         </nav>
-      </div>
-    </header>
+      </header>
 
-    <div class='container main-content'>
-      {% block messages %} 
-        {% if messages %}
-          <ul class='flash'>
-            {% for m in messages %}
+      <header class='d-none d-md-block'>
+        <div class='container'>
+          <nav>
+            <ul class='nav-links'>
+              <li><a href='{% url 'index' %}' class='no-decoration {% if page == 'index' %}active{% endif %}'><i class='fas fa-university'></i> Home</a></li>
+              {% if user.is_authenticated %}
+                {% if user.profile.admin %}
+                  <li><a href='{% url 'company_index' %}' class='no-decoration {% if page == 'company_index' %}active{% endif %}'><i class='fas fa-building'></i> Companies</a></li>
+                {% endif %}
+                {% if user.profile.supervisor_up %}
+                  <li><a href='{% url 'user_index' %}' class='no-decoration {% if page == 'user_index' %}active{% endif %}'><i class='fas fa-user'></i> Users</a></li>
+                {% endif %}
+                <li><a href='{% url 'account_index' %}' class='no-decoration {% if page == 'account_index' %}active{% endif %}'><i class='fas fa-address-book'></i> Accounts</a></li>
+                <li><a href='{% url 'check_index' %}' class='no-decoration {% if page == 'check_index' %}active{% endif %}'><i class='fas fa-credit-card'></i> Checks</a></li>
+              {% endif %}
+            </ul>
+
+            <ul class='float-right nav-links'>
+              <li><p>{% if user.is_authenticated %}{{ user }}{% else %}Guest{% endif %}</p></li>
               <li>
-                <div class='alert alert-{{m.level_tag}} alert-dismissible fade show'>
-                  {{m}}
-                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                    <span aria-hidden='true'>&times;</span>
-                  </button>
-                </div>
+                {% if user.is_authenticated %}
+                  <a class='no-decoration' href='{% url 'logout' %}'><i class='fas fa-paper-plane'></i> Log Out</a>
+                {% else %}
+                  <a class='no-decoration {% if page == 'login' %}active{% endif %}' href='{% url 'login' %}'><i class='fas fa-user-circle'></i> Log In</a>
+                {% endif %}
               </li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-      {% endblock %}
+            </ul>
+          </nav>
+        </div>
+      </header>
 
-      {% block content %}{% endblock %}
+      <div class='container' id='main-content'>
+        {% if user.is_authenticated and user.profile.admin_simulating %}
+          <div class='simulate'>
+            <p>
+              Now simulating company: {{ user.profile.company }}
+              <a href='{% url 'stop_simulate' %}' class='stop-simulate float-right fas fa-times'></a>
+            </p>
+          </div>
+        {% endif %}
+        {% block messages %}
+          {% if messages %}
+            <ul class='flash'>
+              {% for m in messages %}
+                <li>
+                  <div class='alert alert-{{m.level_tag}} alert-dismissible fade show'>
+                    {{m}}
+                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                      <span aria-hidden='true'>&times;</span>
+                    </button>
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endblock %}
+
+        {% block content %}{% endblock %}
+      </div>
+
+      <footer class='d-none d-md-block'>
+        <div class='container'>
+          <div class='row'>
+            <div class='col'>
+              <h4>Navigation</h4>
+              <ul class='footer-links'>
+                <li><a href='{% url 'index' %}'>Home</a></li>
+                <li><a href='{% url 'account_index' %}'>Accounts</a></li>
+                <li><a href='{% url 'check_index' %}'>Checks</a></li>
+              </ul>
+            </div>
+            <div class='col'>
+              <h4>Other Links</h4>
+              <ul class='footer-links'>
+                <li><a href='{% url 'about' %}'>About</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col'><hr/></div>
+          </div>
+          <div class='row'>
+            <div class='col'>
+              <p class='text-center'>&copy; Unicoders {% now 'Y' %}</p>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   </body>
 </html>

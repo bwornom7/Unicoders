@@ -44,15 +44,31 @@ def pdf_from_html(request, html, error_redirect, error_args):
     result = BytesIO()
     pdf = pisa.pisaDocument(StringIO(html), dest=result)
     if not pdf.err:
-        logger.info('Letter 1 generated')
+        logger.info('Letter PDF generated')
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     else:
-        messages.warning(request, 'Error generating letter 1 PDF.')
+        messages.warning(request, 'Error generating letter PDF.')
         return redirect(error_redirect, **error_args)
+
+
+def handler404(request, exception, template_name='404.html'):
+    response = render(request, template_name)
+    response.status_code = 404
+    return response
+
+
+def handler500(request, exception, template_name='500.html'):
+    response = render(request, template_name)
+    response.status_code = 500
+    return response
 
 
 def index(request):
     return render(request, 'index.html')
+
+
+def about(request):
+    return render(request, 'about.html')
 
 
 @login_required
@@ -65,7 +81,12 @@ def logout_user(request):
 
 @login_required
 def check_index(request):
-    checks = Check.objects.filter(user=request.user)
+    if request.user.profile.admin_not_simulating():
+        checks = Check.objects.all()
+    elif request.user.profile.supervisor_up():
+        checks = Check.objects.filter(user__profile__company=request.user.profile.company)
+    else:
+        checks = Check.objects.filter(user=request.user)
     checks = process_params(checks, request.GET, ['account__name__icontains'])
     context = process_context(request.GET, {'checks': checks})
     return render(request, 'checks/index.html', context)
@@ -112,7 +133,10 @@ def check_delete(request, check_id):
 
 @login_required
 def account_index(request):
-    accounts = Account.objects.filter(company=request.user.profile.company)
+    if request.user.profile.admin_not_simulating():
+        accounts = Account.objects.all()
+    else:
+        accounts = Account.objects.filter(company=request.user.profile.company)
     accounts = process_params(accounts, request.GET, ['name__icontains', 'number__icontains'])
     context = process_context(request.GET, {'accounts': accounts})
     return render(request, 'accounts/index.html', context)
@@ -216,7 +240,7 @@ def company_new(request):
         form = CompanyForm(request.POST)
         if form.is_valid():
             form.save()
-            logger.info('Successfully added company: {}'.format(company))
+            logger.info('Successfully added company: {}'.format(form.cleaned_data['name']))
             messages.success(request, 'Successfully added company!')
             return redirect(company_index)
     else:
@@ -251,6 +275,21 @@ def company_delete(request, company_id):
     return redirect('company_index')
 
 
+@login_required
+@admin_required
+def company_simulate(request, company_id):
+    company = get_object_or_404(Company, pk=company_id)
+    request.user.profile.simulate(company)
+    return redirect('company_index')
+
+
+@login_required
+@admin_required
+def company_stop_simulate(request):
+    request.user.profile.stop_simulate()
+    return redirect('company_index')
+
+
 @logout_required
 def register(request, company_id):
     company = get_object_or_404(Company, pk=company_id)
@@ -264,7 +303,7 @@ def register(request, company_id):
 
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
-            logger.info('Account {} created'.format(account.name))
+            logger.info('Account {} created'.format(user.profile.full_name()))
             messages.success(request, 'Account successfully created!')
             return redirect('index')
     else:
@@ -328,7 +367,7 @@ def check_letter3(request, check_id):
 @login_required
 @supervisor_required
 def user_index(request):
-    if request.user.profile.admin():
+    if request.user.profile.admin_not_simulating():
         users = User.objects.all()
     else:
         users = User.objects.filter(profile__company=request.user.profile.company)

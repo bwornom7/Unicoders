@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <div class='row'>
   <div class='col'>
-    <h1 class='text-center'><i class='fas fa-check'></i> Check It</h1>
+    <h1 class='text-center'><img src='{% static 'img/favicon.png' %}' width='50'/> Check It</h1>
     <p>Still logging and managing those bounced checks by hand? Our technology is the perfect solution for you. Get started logging checks right here, and we'll let you know when it's time to send the letters.</p>
     
     {% if user.is_authenticated %}

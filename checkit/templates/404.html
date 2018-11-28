@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %} {{block.super}} - Not Found {% endblock %}
+
+{% block content %}
+  <div class='row'>
+    <div class='col'>
+      <h1 class='text-center'>404</h1>
+      <h2 class='text-center'>Not Found</h2>
+      <h3 class='text-center'>Couldn't Find It!</h3>
+      <hr/>
+      <h3 class='text-center'><a href='{% url 'index' %}'>Take me Home!</a></h3>
+    </div>
+  </div>
+{% endblock %}

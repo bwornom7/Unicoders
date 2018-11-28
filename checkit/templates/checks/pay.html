@@ -17,7 +17,7 @@
       <div class='row'>
         <div class='col-sm-12'>
           <p class='no-margin bg-danger'>+ Check Amount: ${{ check.amount }}</p>
-          <p class='no-margin bg-danger'>+ Late Fee: ${{ check.user.profile.company.late_fee }}</p>
+          <p class='no-margin bg-danger'>+ Late Fee: ${{ check.account.company.late_fee }}</p>
           {% if check.amount_paid %}<p class='no-margin bg-success'>- Already Paid: ${{ check.amount_paid }}</p>{% endif %}
           <hr>
           <p>Total Due: {{ check.amount_due }}</p>

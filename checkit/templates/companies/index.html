@@ -21,6 +21,9 @@
         <h3 class='text-center'>{{ company }}</h3>
         <p>{{ company.desc }}</p>
         <ul class='actions'>
+          <li><a href='{% url 'simulate' company.id %}' data-toggle='tooltip' title='Simulate Company'>
+            <i class='fas fa-arrow-circle-right'></i>
+          </a></li>
           <li><a href='{% url 'company_edit' company.id %}' data-toggle='tooltip' title='Edit Company'>
             <i class='fas fa-cog'></i>
           </a></li>

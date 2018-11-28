@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {{block.super}} - About {% endblock %}
+
+{% block content %}
+  <div class='row'>
+    <div class='col'>
+      <h1 class='text-center'>About Us</h1>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col about-card'>
+      <img src='{% static 'img/ben.jpg' %}'/>
+      <h4>Ben Wornom</h4>
+      <p>Project Manager</p>
+    </div>
+    <div class='col about-card'>
+      <img src='{% static 'img/katarina.jpg' %}'/>
+      <h4>Katarina Rathert</h4>
+      <p>Software Developer</p>
+    </div>
+    <div class='col about-card'>
+      <img src='{% static 'img/sam.jpg' %}'/>
+      <h4>Sam Henry</h4>
+      <p>Software Developer</p>
+    </div>
+    <div class='col about-card'>
+      <img src='{% static 'img/seth.jpg' %}'/>
+      <h4>Seth Severson</h4>
+      <p>Scribe/Webmaster</p>
+    </div>
+    <div class='col about-card'>
+      <img src='{% static 'img/bill.jpg' %}'/>
+      <h4>Bill Alger</h4>
+      <p>DBA Specialist</p>
+    </div>
+  </div>
+{% endblock %}

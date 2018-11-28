@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('about/', views.about, name='about'),
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/', views.logout_user, name='logout'),
     path('checks/', views.check_index, name='check_index'),
@@ -26,6 +27,8 @@ urlpatterns = [
     path('companies/<int:company_id>/', views.company_edit, name='company_edit'),
     path('companies/<int:company_id>/delete', views.company_delete, name='company_delete'),
     path('companies/<int:company_id>/register/', views.register, name='register'),
+    path('companies/<int:company_id>/simulate/', views.company_simulate, name='simulate'),
+    path('companies/stopsimulate/', views.company_stop_simulate, name='stop_simulate'),
     path('letters/', views.letter, name='letter'),
     path('users/', views.user_index, name='user_index'),
     path('users/<int:user_id>/', views.user_edit, name='user_edit'),

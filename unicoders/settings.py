@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import logging.config
 import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -24,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '$b!jfycxk4c(rc1!r02*1qr&ww!_shafpkwb*kr_)3^xp6dok&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -97,7 +98,6 @@ DATABASES = {
 }
 
 #Logging
-import logging.config
 LOGGING_CONFIG = None
 logging.config.dictConfig({
     'version': 1,
@@ -115,13 +115,11 @@ logging.config.dictConfig({
         },
     },
     'loggers': {
-    # root logger
         '': {
             'level': 'WARNING',
             'handlers': ['console'],
         },
-
-    'checkit': {
+        'checkit': {
             'level': 'INFO',
             'handlers': ['console'],
             # required to avoid double logging with root logger

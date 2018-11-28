@@ -58,7 +58,9 @@ class AccountForm(forms.ModelForm):
 class CheckForm(forms.ModelForm):
     number = forms.CharField(help_text='Enter the check number')
     amount = forms.CharField(help_text='Enter the dollar amount')
-    date = forms.DateField(initial=datetime.date.today)
+    date = forms.DateField(initial=datetime.date.today,
+                           input_formats=['%m/%d/%Y'],
+                           widget=forms.DateInput(format='%m/%d/%Y', attrs={'id': 'date-field'}))
 
     class Meta:
         model = Check
@@ -68,7 +70,8 @@ class CheckForm(forms.ModelForm):
 class CheckEditForm(forms.ModelForm):
     number = forms.CharField(help_text='Enter the check number')
     amount = forms.CharField(help_text='Enter the dollar amount')
-    date = forms.DateField()
+    date = forms.DateField(input_formats=['%m/%d/%Y'],
+                           widget=forms.DateInput(format='%m/%d/%Y', attrs={'id': 'date-field'}))
     paid = forms.BooleanField(required=False)
 
     class Meta:
