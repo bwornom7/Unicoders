@@ -6281,6 +6281,29 @@ th {
 #main-content {
   padding-bottom: 210px; }
 
+.dropdown {
+  float: right;
+  padding: 0.75em;
+  position: relative;
+  display: inline-block; }
+
+.dropdown-content {
+  background-color: white;
+  display: none;
+  position: absolute;
+  z-index: 1;
+  box-shadow: 0 0 4px 0 black; }
+  .dropdown-content li {
+    width: 100%;
+    padding: 4px 10px; }
+    .dropdown-content li a {
+      text-decoration: none; }
+    .dropdown-content li:hover {
+      background-color: #61c0d1; }
+
+.dropdown:hover .dropdown-content {
+  display: block; }
+
 footer {
   padding-top: 1em;
   background-color: #23272c;
@@ -6553,5 +6576,8 @@ label {
 .about-card img {
   max-width: 200px;
   border-radius: 1em; }
+
+.ui-datepicker-calendar th {
+  background-color: white; }
 
 /*# sourceMappingURL=app.css.map */

@@ -21,13 +21,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def process_params(objects, params, filters, default_sort='-date_created'):
+def process_params(user, objects, params, filters, default_sort='-date_created'):
     if params.get('search'):
         search = params.get('search')
         q = reduce(ior, [Q(**{x: search}) for x in filters])
         objects = objects.filter(q)
     objects = objects.order_by(params.get('sort') if params.get('sort') else default_sort)
-    per = params.get('per') if params.get('per') else 10
+    per = params.get('per') if params.get('per') else user.profile.records_per_page
     page = params.get('page') if params.get('page') else 1
     paginator = Paginator(objects, per)
     return paginator.get_page(page)
@@ -87,7 +87,7 @@ def check_index(request):
         checks = Check.objects.filter(user__profile__company=request.user.profile.company)
     else:
         checks = Check.objects.filter(user=request.user)
-    checks = process_params(checks, request.GET, ['account__name__icontains'])
+    checks = process_params(request.user, checks, request.GET, ['account__name__icontains'])
     context = process_context(request.GET, {'checks': checks})
     return render(request, 'checks/index.html', context)
 
@@ -137,7 +137,7 @@ def account_index(request):
         accounts = Account.objects.all()
     else:
         accounts = Account.objects.filter(company=request.user.profile.company)
-    accounts = process_params(accounts, request.GET, ['name__icontains', 'number__icontains'])
+    accounts = process_params(request.user, accounts, request.GET, ['name__icontains', 'number__icontains'])
     context = process_context(request.GET, {'accounts': accounts})
     return render(request, 'accounts/index.html', context)
 
@@ -190,7 +190,7 @@ def account_delete(request, account_id):
 def account_check_index(request, account_id):
     account = get_object_or_404(Account, pk=account_id)
     checks = account.check_set.all()
-    checks = process_params(checks, request.GET, [''])
+    checks = process_params(request.user, checks, request.GET, [''])
     context = process_context(request.GET, {'checks': checks, 'account': account})
     return render(request, 'checks/index.html', context)
 
@@ -220,7 +220,7 @@ def account_check_new(request, account_id):
 @admin_required
 def company_index(request):
     companies = Company.objects.all()
-    companies = process_params(companies, request.GET, ['name__icontains'])
+    companies = process_params(request.user, companies, request.GET, ['name__icontains'])
     context = process_context(request.GET, {'companies': companies})
     return render(request, 'companies/index.html', context)
 
@@ -228,7 +228,7 @@ def company_index(request):
 @logout_required
 def company_choose(request):
     companies = Company.objects.all()
-    companies = process_params(companies, request.GET, ['name__icontains'])
+    companies = process_params(request.user, companies, request.GET, ['name__icontains'])
     context = process_context(request.GET, {'companies': companies})
     return render(request, 'companies/choose.html', context)
 
@@ -371,7 +371,7 @@ def user_index(request):
         users = User.objects.all()
     else:
         users = User.objects.filter(profile__company=request.user.profile.company)
-    users = process_params(users, request.GET, ['first_name__icontains', 'last_name__icontains', 'email__icontains'], '-date_joined')
+    users = process_params(request.user, users, request.GET, ['first_name__icontains', 'last_name__icontains', 'email__icontains'], '-date_joined')
     context = process_context(request.GET, { 'users': users }, '-date_joined')
     return render(request, 'users/index.html', context)
 
@@ -407,4 +407,17 @@ def user_delete(request, user_id):
 
 @login_required
 def profile(request):
-    pass
+    user = request.user
+    if request.method == 'POST':
+        user_form = ProfileUserForm(request.POST, instance=user)
+        profile_form = ProfileEditForm(request.POST, instance=user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            logger.info('Profile "{}" successfully updated'.format(user))
+            messages.success(request, 'Profile successfully updated!')
+            return redirect('index')
+    else:
+        user_form = ProfileUserForm(instance=user)
+        profile_form = ProfileEditForm(instance=user.profile)
+    return render(request, 'users/profile.html', {'user_form': user_form, 'profile_form': profile_form})

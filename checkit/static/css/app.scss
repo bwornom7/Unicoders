@@ -49,6 +49,33 @@ th {
   padding-bottom: 210px;
 }
 
+.dropdown {
+  float: right;
+  padding: 0.75em;
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  background-color: white;
+  display: none;
+  position: absolute;
+  z-index: 1;
+  box-shadow: 0 0 4px 0 black;
+  li {
+    width: 100%;
+    padding: 4px 10px;
+    a { text-decoration: none; }
+    &:hover {
+      background-color: theme-color-level('second', -4);
+    }
+  }
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
 footer {
   padding-top: 1em;
   background-color: theme-color-level('dark', 4);
@@ -408,3 +435,5 @@ label {
     border-radius: 1em;
   }
 }
+
+.ui-datepicker-calendar th { background-color: white; }

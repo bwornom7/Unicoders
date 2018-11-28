@@ -35,10 +35,30 @@ class UserEditForm(forms.ModelForm):
 
 class ProfileForm(forms.ModelForm):
     is_supervisor = forms.BooleanField(label='Supervisor?', required=False)
+    records_per_page = forms.IntegerField(label='Items per page')
 
     class Meta:
         model = Profile
-        fields = ['is_supervisor']
+        fields = ['is_supervisor', 'records_per_page']
+
+
+class ProfileUserForm(forms.ModelForm):
+    username = forms.CharField(help_text='e.g. foobar97')
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+    email = forms.EmailField(help_text='e.g. foobar97@gmail.com')
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email')
+
+
+class ProfileEditForm(forms.ModelForm):
+    records_per_page = forms.IntegerField(label='Items per page')
+
+    class Meta:
+        model = Profile
+        fields = ['records_per_page']
 
 
 class AccountForm(forms.ModelForm):

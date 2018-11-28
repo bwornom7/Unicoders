@@ -8,7 +8,7 @@
   <div class='col-sm-12 col-md-6'>
     <input value='{% if search %}{{search}}{% endif %}' id='search' type='text' placeholder='Search Account Name' onkeypress='handlesearch(event)'/>
   </div>
-  {% if user.profile.regular %}
+  {% if not user.profile.admin %}
     <div class='col-sm-12 col-md-6'>
       <a href='{% url 'letter' %}' class='btn btn-primary float-right no-margin'><i class='fas fa-envelope'></i> Generate Letters</a>
     </div>

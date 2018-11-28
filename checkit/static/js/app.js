@@ -30,6 +30,10 @@ $(document).ready(() => {
 
     a.href = '?' + wparams.toString();
   });
+
+  $('.fa-cog').hover(function() {
+    $(this).toggleClass('fa-spin');
+  });
 });
 
 $(() => {
