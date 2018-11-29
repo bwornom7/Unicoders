@@ -1,1 +1,49 @@
-<img src="/static/img/bars.svg" height="600"/>
+{% extends 'base.html' %}
+{% load chartit %}
+
+{% block title %}{{ block.super }} - Reports{% endblock %}
+
+{% block content %}
+  {{ letter_charts|load_charts:'letter1_chart,letter2_chart,letter3_chart' }}
+  <div class='row'>
+    <div class='col'>
+      <form method='post' >
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+        <div class='row'>
+          <div class='col-sm-12 col-md-6'>
+            <label for='id_start_date'>Start Date:</label>
+            {{ form.start_date }}
+            {{ form.start_date.errors }}
+          </div>
+          <div class='col-sm-12 col-md-6'>
+            <label for='id_end_date'>End Date:</label>
+            {{ form.end_date }}
+            {{ form.end_date.errors }}
+          </div>
+          <div class='col-sm-12'>
+            <input class='submit btn btn-primary btn-block' type='submit' value='Update Report'/>
+            <hr/>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col'>
+      <div class='chart' id='letter1_chart'></div>
+    </div>
+    <div class='col'>
+      <div class='chart' id='letter2_chart'></div>
+    </div>
+    <div class='col'>
+      <div class='chart' id='letter3_chart'></div>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col'>
+      <img class='chart' src="/static/img/bars.svg" width='50%'/>
+    </div>
+  </div>
+{% endblock %}

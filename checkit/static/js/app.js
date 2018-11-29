@@ -38,7 +38,7 @@ $(document).ready(() => {
 
 $(() => {
   $('[data-toggle="tooltip"]').tooltip();
-  $('#date-field').datepicker();
+  $('.date-field').datepicker();
 });
 
 function handlesearch(e) {

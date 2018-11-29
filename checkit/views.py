@@ -7,7 +7,7 @@ from django.contrib import messages
 from .forms import *
 from .models import Check, Account, Company
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.http import HttpResponse
 
 from io import StringIO, BytesIO
@@ -16,6 +16,7 @@ from django.template.loader import get_template
 
 from functools import reduce
 from operator import ior
+from chartit import DataPool, Chart
 import logging
 import leather
 
@@ -50,6 +51,46 @@ def pdf_from_html(request, html, error_redirect, error_args):
     else:
         messages.warning(request, 'Error generating letter PDF.')
         return redirect(error_redirect, **error_args)
+
+
+def generate_letter_chart(id, checks, start_date, end_date):
+    letter = 'letter{}_date'.format(id)
+    ds = DataPool(
+        series=[{
+            'options': {
+                'source': checks
+                          .filter(**{'{}__range'.format(letter): (start_date, end_date)})
+                          .values(letter)
+                          .annotate(count=Count(letter))
+                          .exclude(**{'{}__isnull'.format(letter): True})
+                          .order_by(letter),
+            },
+            'terms': [letter, 'count']
+        }]
+    )
+
+    return Chart(
+        datasource=ds,
+        series_options=[{
+            'options': {
+                'type': 'column',
+                'stacking': False
+            },
+            'terms': {
+                letter: ['count']
+            }
+        }],
+        chart_options={
+            'title': {
+                'text': 'Generated Warning Letter {}'.format(id)
+            },
+            'xAxis': {
+                'title': {
+                    'text': 'Date'
+                }
+            }
+        }
+    )
 
 
 def handler404(request, exception, template_name='404.html'):
@@ -408,28 +449,40 @@ def user_delete(request, user_id):
 
 @login_required
 def report(request):
-    checks = Check.objects.filter(user=request.user)
+    if request.user.profile.admin_not_simulating():
+        checks = Check.objects.all()
+    elif request.user.profile.supervisor_up():
+        checks = Check.objects.filter(user__profile__company=request.user.profile.company)
+    else:
+        checks = Check.objects.filter(user=request.user)
 
-    #generate chart using python lib and checks
-    paid = 0
-    notPaid = 0
+    end_date = datetime.datetime.now().date()
+    start_date = end_date - datetime.timedelta(days=7)
+    if request.method == 'POST':
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+    else:
+        form = ReportForm()
+    logger.info(start_date)
 
-    for x in checks:
-        if x.paid:
-            paid += 1
-        else:
-            notPaid += 1
-
+    copy = checks.filter(date_created__date__range=(start_date, end_date))
+    paid = len([c for c in copy if c.paid])
+    not_paid = len(copy) - paid
     data = [
         (paid, 'Checks Paid'),
-        (notPaid, 'Checks Not Paid')
+        (not_paid, 'Checks Not Paid')
     ]
-
     chart = leather.Chart('Checks Processed by CheckIt')
     chart.add_bars(data)
     chart.to_svg('checkit/static/img/bars.svg')
 
-    return render(request, 'report/report.html')
+    letter_charts = []
+    for i in range(3):
+        letter_charts.append(generate_letter_chart(i + 1, checks, start_date, end_date))
+
+    return render(request, 'report/report.html', {'letter_charts': letter_charts, 'form': form})
 
 
 @login_required

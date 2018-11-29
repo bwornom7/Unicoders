@@ -7,3 +7,4 @@ django-heroku
 gunicorn
 xhtml2pdf
 leather
+django-chartit

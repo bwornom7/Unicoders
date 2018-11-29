@@ -80,7 +80,7 @@ class CheckForm(forms.ModelForm):
     amount = forms.CharField(help_text='Enter the dollar amount')
     date = forms.DateField(initial=datetime.date.today,
                            input_formats=['%m/%d/%Y'],
-                           widget=forms.DateInput(format='%m/%d/%Y', attrs={'id': 'date-field'}))
+                           widget=forms.DateInput(format='%m/%d/%Y', attrs={'class': 'date-field'}))
 
     class Meta:
         model = Check
@@ -91,7 +91,7 @@ class CheckEditForm(forms.ModelForm):
     number = forms.CharField(help_text='Enter the check number')
     amount = forms.CharField(help_text='Enter the dollar amount')
     date = forms.DateField(input_formats=['%m/%d/%Y'],
-                           widget=forms.DateInput(format='%m/%d/%Y', attrs={'id': 'date-field'}))
+                           widget=forms.DateInput(format='%m/%d/%Y', attrs={'class': 'date-field'}))
     paid = forms.BooleanField(required=False)
 
     class Meta:
@@ -117,3 +117,12 @@ class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
         fields = ['name', 'desc', 'street', 'city', 'state', 'zip_code', 'wait_period', 'late_fee']
+
+
+class ReportForm(forms.Form):
+    start_date = forms.DateField(initial=datetime.datetime.now().date() - datetime.timedelta(days=7),
+                                 input_formats=['%m/%d/%Y'],
+                                 widget=forms.DateInput(format='%m/%d/%Y', attrs={'class': 'date-field'}))
+    end_date = forms.DateField(initial=datetime.datetime.now().date(),
+                               input_formats=['%m/%d/%Y'],
+                               widget=forms.DateInput(format='%m/%d/%Y', attrs={'class': 'date-field'}))

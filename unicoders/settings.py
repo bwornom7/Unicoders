@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'checkit.apps.CheckitConfig',
     'sass_processor',
+    'chartit',
 ]
 
 MIDDLEWARE = [
