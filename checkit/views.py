@@ -23,13 +23,17 @@ import leather
 logger = logging.getLogger(__name__)
 
 
+def get_per(user):
+    return user.profile.records_per_page if user.is_authenticated else 10
+
+
 def process_params(user, objects, params, filters, default_sort='-date_created'):
     if params.get('search'):
         search = params.get('search')
         q = reduce(ior, [Q(**{x: search}) for x in filters])
         objects = objects.filter(q)
     objects = objects.order_by(params.get('sort') if params.get('sort') else default_sort)
-    per = params.get('per') if params.get('per') else user.profile.records_per_page
+    per = params.get('per') if params.get('per') else get_per(user)
     page = params.get('page') if params.get('page') else 1
     paginator = Paginator(objects, per)
     return paginator.get_page(page)
