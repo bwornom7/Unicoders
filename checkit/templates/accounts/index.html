@@ -5,6 +5,9 @@
 {% block content %}
 
 <div class='row'>
+  <div class='col-sm-12'>
+    <h3>{{ heading }}</h3>
+  </div>
   <div class='col-sm-12 col-md-6'>
     <input value='{% if search %}{{search}}{% endif %}' id='search' type='text' placeholder='Search Account Name or Number' onkeypress='handlesearch(event)'/>
   </div>
@@ -47,7 +50,7 @@
                     <i class='fas fa-plus-square'></i>
                   </a></li>
                 {% endif %}
-                {% if user.profile.supervisor %}
+                {% if user.profile.supervisor_up %}
                   <li><a href='{% url 'account_check_index' account.id %}' data-toggle='tooltip' title='View Checks'>
                     <i class='fas fa-folder'></i>
                   </a></li>

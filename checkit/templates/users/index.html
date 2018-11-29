@@ -5,6 +5,9 @@
 {% block content %}
 
 <div class='row'>
+  <div class='col-sm-12'>
+    <h3>{{ heading }}</h3>
+  </div>
   <div class='col-sm-12 col-md-6'>
     <input value='{% if search %}{{search}}{% endif %}' id='search' type='text' placeholder='Search Account Name or Email' onkeypress='handlesearch(event)'/>
   </div>
@@ -17,6 +20,7 @@
       <thead>
         <tr>
           <th scope='col'>{% include 'snippets/sort-link.html' with field='first_name' heading='Name' %}</th>
+          <th scope='col'>{% include 'snippets/sort-link.html' with field='username' heading='Username' %}</th>
           <th scope='col'>{% include 'snippets/sort-link.html' with field='profile__company__name' heading='Company' %}</th>
           <th scope='col'>{% include 'snippets/sort-link.html' with field='email' heading='Email' %}</th>
           <th scope='col'>{% include 'snippets/sort-link.html' with field='date_joined' heading='Date Joined' %}</th>
@@ -27,6 +31,7 @@
         {% for u in users %}
           <tr>
             <td>{{ u.profile.full_name }}</td>
+            <td>{{ u.username }}</td>
             <td>{{ u.profile.company.name }}</td>
             <td>{{ u.email }}</td>
             <td>{{ u.date_joined}}</td>
@@ -34,6 +39,9 @@
               <ul class='actions'>
                 <li><a href='{% url 'user_edit' u.id %}' data-toggle='tooltip' title='Edit User'>
                   <i class='fas fa-cog'></i>
+                </a></li>
+                <li><a href='{% url 'user_check_index' u.id %}' data-toggle='tooltip' title="View User Checks">
+                  <i class='fas fa-folder'></i>
                 </a></li>
                 {% if user.profile.admin %}
                   <li><a href='{% url 'user_delete' u.id %}' data-toggle='tooltip' title='Delete User'>

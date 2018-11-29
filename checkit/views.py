@@ -129,12 +129,15 @@ def logout_user(request):
 def check_index(request):
     if request.user.profile.admin_not_simulating():
         checks = Check.objects.all()
+        heading = 'All Checks'
     elif request.user.profile.supervisor_up():
         checks = Check.objects.filter(user__profile__company=request.user.profile.company)
+        heading = 'Checks for Company: {}'.format(request.user.profile.company)
     else:
         checks = Check.objects.filter(user=request.user)
+        heading = 'Your Checks'
     checks = process_params(request.user, checks, request.GET, ['account__name__icontains'])
-    context = process_context(request.GET, {'checks': checks})
+    context = process_context(request.GET, {'checks': checks, 'heading': heading})
     return render(request, 'checks/index.html', context)
 
 
@@ -181,10 +184,12 @@ def check_delete(request, check_id):
 def account_index(request):
     if request.user.profile.admin_not_simulating():
         accounts = Account.objects.all()
+        heading = 'All Accounts'
     else:
         accounts = Account.objects.filter(company=request.user.profile.company)
+        heading = 'Accounts for Company: {}'.format(request.user.profile.company)
     accounts = process_params(request.user, accounts, request.GET, ['name__icontains', 'number__icontains'])
-    context = process_context(request.GET, {'accounts': accounts})
+    context = process_context(request.GET, {'accounts': accounts, 'heading': heading})
     return render(request, 'accounts/index.html', context)
 
 
@@ -237,7 +242,11 @@ def account_check_index(request, account_id):
     account = get_object_or_404(Account, pk=account_id)
     checks = account.check_set.all()
     checks = process_params(request.user, checks, request.GET, [''])
-    context = process_context(request.GET, {'checks': checks, 'account': account})
+    heading = 'Checks for Account: {}'.format(account)
+    context = process_context(request.GET, {'checks': checks,
+                                            'heading': heading,
+                                            'back_link': 'account_index',
+                                            'back_name': 'All Accounts'})
     return render(request, 'checks/index.html', context)
 
 
@@ -267,7 +276,7 @@ def account_check_new(request, account_id):
 def company_index(request):
     companies = Company.objects.all()
     companies = process_params(request.user, companies, request.GET, ['name__icontains'])
-    context = process_context(request.GET, {'companies': companies})
+    context = process_context(request.GET, {'companies': companies, 'heading': 'All Companies'})
     return render(request, 'companies/index.html', context)
 
 
@@ -415,11 +424,27 @@ def check_letter3(request, check_id):
 def user_index(request):
     if request.user.profile.admin_not_simulating():
         users = User.objects.all()
+        heading = 'All Users'
     else:
         users = User.objects.filter(profile__company=request.user.profile.company)
+        heading = 'Users for Company: {}'.format(request.user.profile.company)
     users = process_params(request.user, users, request.GET, ['first_name__icontains', 'last_name__icontains', 'email__icontains'], '-date_joined')
-    context = process_context(request.GET, { 'users': users }, '-date_joined')
+    context = process_context(request.GET, {'users': users, 'heading': heading}, '-date_joined')
     return render(request, 'users/index.html', context)
+
+
+@login_required
+@supervisor_required
+def user_check_index(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    checks = user.check_set.all()
+    checks = process_params(request.user, checks, request.GET, [''])
+    heading = 'Checks for User: {}'.format(user.profile.full_name())
+    context = process_context(request.GET, {'checks': checks,
+                                            'heading': heading,
+                                            'back_link': 'user_index',
+                                            'back_name': 'All Users'})
+    return render(request, 'checks/index.html', context)
 
 
 @login_required
@@ -455,10 +480,13 @@ def user_delete(request, user_id):
 def report(request):
     if request.user.profile.admin_not_simulating():
         checks = Check.objects.all()
+        heading = 'Reports for All Checks'
     elif request.user.profile.supervisor_up():
         checks = Check.objects.filter(user__profile__company=request.user.profile.company)
+        heading = 'Reports for Company: {}'.format(request.user.profile.company)
     else:
         checks = Check.objects.filter(user=request.user)
+        heading = 'Reports for Your Checks'
 
     end_date = datetime.datetime.now().date()
     start_date = end_date - datetime.timedelta(days=7)
@@ -486,7 +514,7 @@ def report(request):
     for i in range(3):
         letter_charts.append(generate_letter_chart(i + 1, checks, start_date, end_date))
 
-    return render(request, 'report/report.html', {'letter_charts': letter_charts, 'form': form})
+    return render(request, 'report/report.html', {'letter_charts': letter_charts, 'form': form, 'heading': heading})
 
 
 @login_required

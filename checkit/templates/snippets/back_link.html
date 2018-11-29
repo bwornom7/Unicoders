@@ -1,5 +1,5 @@
 <div class='row'>
-  <div class='col-sm-12 col-md-8 col-lg-6 mx-auto'>
+  <div class='col-sm-12 {% if not index_page %}col-md-8 col-lg-6{% endif %} mx-auto'>
     <a href='{% url back_url %}'><i class='fas fa-chevron-circle-left'></i> {{ page_name }}</a>
   </div>
 </div>
