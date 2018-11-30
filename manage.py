@@ -2,6 +2,11 @@
 import os
 import sys
 
+"""
+The entry point of the entire website. Run 
+python manage.py runserver
+to start up the server.
+"""
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'unicoders.settings')
     try:

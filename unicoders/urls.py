@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+# The error handler pages
 handler404 = 'checkit.views.handler404'
 handler500 = 'checkit.views.handler500'
 
+# The basic paths, including the actual checkit app
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),

@@ -1,3 +1,8 @@
+"""
+This file contains the core application logic. Most url
+requests end up here and logic is handled here.
+"""
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -20,26 +25,51 @@ from chartit import DataPool, Chart
 import logging
 import leather
 
+# The logger for printing data to console
 logger = logging.getLogger(__name__)
 
 
 def get_per(user):
+    """Get how many records to show per page"""
     return user.profile.records_per_page if user.is_authenticated else 10
 
 
 def process_params(user, objects, params, filters, default_sort='-date_created'):
+    """
+    This is custom logic that is run for any index page with common functionality
+    such as sorting, filtering, and pagination.
+    :param user: The user sending the request
+    :param objects: The objects to filter/show
+    :param params: The custom parameters from the URL
+    :param filters: The filters to search by
+    :param default_sort: The default sort for a list of items
+    :return: A paginator object with the needed objects displayed
+    """
+    # Filter by the search query
     if params.get('search'):
         search = params.get('search')
         q = reduce(ior, [Q(**{x: search}) for x in filters])
         objects = objects.filter(q)
+
+    # Filter by sort, items per page, and page
     objects = objects.order_by(params.get('sort') if params.get('sort') else default_sort)
     per = params.get('per') if params.get('per') else get_per(user)
     page = params.get('page') if params.get('page') else 1
+
+    # Now return the paginator
     paginator = Paginator(objects, per)
     return paginator.get_page(page)
 
 
 def process_context(request, vars, default_sort='-date_created'):
+    """
+    This function processes a context object for index pages. It
+    includes all necessary fields for a template
+    :param request: The request needing the context
+    :param vars: The extra context variables
+    :param default_sort: The default sort for a page
+    :return: The updated context
+    """
     context = request.dict()
     context.update(vars)
     if 'sort' not in context: context['sort'] = default_sort
@@ -47,6 +77,14 @@ def process_context(request, vars, default_sort='-date_created'):
 
 
 def pdf_from_html(request, html, error_redirect, error_args):
+    """
+    Generates a PDF document from an html string
+    :param request: The request to send teh response to
+    :param html: The html to generate
+    :param error_redirect: The place to redirect on error
+    :param error_args: The arguments for an error
+    :return: The generated PDF
+    """
     result = BytesIO()
     pdf = pisa.pisaDocument(StringIO(html), dest=result)
     if not pdf.err:
@@ -58,6 +96,16 @@ def pdf_from_html(request, html, error_redirect, error_args):
 
 
 def generate_letter_chart(id, checks, start_date, end_date):
+    """
+    This function generates a letter report based on a
+    start and end date along with which letter.
+    :param id: Is this letter 1, 2, or 3?
+    :param checks: The checks to display info for
+    :param start_date: The starting date range
+    :param end_date: The ending date range
+    :return: The generated chart
+    """
+    # Generate the data pool
     letter = 'letter{}_date'.format(id)
     ds = DataPool(
         series=[{
@@ -73,6 +121,7 @@ def generate_letter_chart(id, checks, start_date, end_date):
         }]
     )
 
+    # Generate and return the chart
     return Chart(
         datasource=ds,
         series_options=[{
@@ -98,27 +147,45 @@ def generate_letter_chart(id, checks, start_date, end_date):
 
 
 def handler404(request, exception, template_name='404.html'):
+    """
+    This function is called whenever an items is not found.
+    It displays a custom 404 page.
+    :param request: The request to display for
+    :param exception: What the exception is (not used)
+    :param template_name: The template to display
+    :return: The response
+    """
     response = render(request, template_name)
     response.status_code = 404
     return response
 
 
 def handler500(request, template_name='500.html'):
+    """
+    This function is called whenever an internal server error occurs.
+    It displays a custom 500 page.
+    :param request: The request to display for
+    :param template_name: The template to display
+    :return: The response
+    """
     response = render(request, template_name)
     response.status_code = 500
     return response
 
 
 def index(request):
+    """The home page"""
     return render(request, 'index.html')
 
 
 def about(request):
+    """The about page"""
     return render(request, 'about.html')
 
 
 @login_required
 def logout_user(request):
+    """Logs out the currently logged in user"""
     logout(request)
     messages.success(request, 'You have successfully logged out.')
     logger.info('User {} successfully logged out'.format(request.user))
@@ -127,13 +194,17 @@ def logout_user(request):
 
 @login_required
 def check_index(request):
+    """The check index page. Displays all checks visible to a user"""
     if request.user.profile.admin_not_simulating():
+        # Admin should see all checks
         checks = Check.objects.all()
         heading = 'All Checks'
     elif request.user.profile.supervisor_up():
+        # Supervisor sees company checks
         checks = Check.objects.filter(user__profile__company=request.user.profile.company)
         heading = 'Checks for Company: {}'.format(request.user.profile.company)
     else:
+        # Regular user sees their checks
         checks = Check.objects.filter(user=request.user)
         heading = 'Your Checks'
     checks = process_params(request.user, checks, request.GET, ['account__name__icontains'])
@@ -143,6 +214,7 @@ def check_index(request):
 
 @login_required
 def check_edit(request, check_id):
+    """The check edit page. Handles the form data for updating checks"""
     check = get_object_or_404(Check, pk=check_id)
     if request.method == 'POST':
         form = CheckEditForm(request.POST, instance=check)
@@ -158,6 +230,7 @@ def check_edit(request, check_id):
 
 @login_required
 def check_pay(request, check_id):
+    """The check pay page. Handles payments."""
     check = get_object_or_404(Check, pk=check_id)
     if request.method == 'POST':
         form = CheckPayForm(request.POST)
@@ -171,8 +244,9 @@ def check_pay(request, check_id):
 
 
 @login_required
-@supervisor_required
+@admin_required
 def check_delete(request, check_id):
+    """The check delete page. Only deletes if admin user."""
     check = get_object_or_404(Check, pk=check_id)
     check.delete()
     logger.info('Check #{} has been deleted'.format(check.number))
@@ -182,10 +256,13 @@ def check_delete(request, check_id):
 
 @login_required
 def account_index(request):
+    """The account index page. Displays accounts accessible to user"""
     if request.user.profile.admin_not_simulating():
+        # Admin sees all accounts
         accounts = Account.objects.all()
         heading = 'All Accounts'
     else:
+        # Other users see company accounts
         accounts = Account.objects.filter(company=request.user.profile.company)
         heading = 'Accounts for Company: {}'.format(request.user.profile.company)
     accounts = process_params(request.user, accounts, request.GET, ['name__icontains', 'number__icontains', 'route__icontains', 'street__icontains'])
@@ -195,6 +272,7 @@ def account_index(request):
 
 @login_required
 def account_new(request):
+    """The account creation page. Handles form data."""
     if request.method == 'POST':
         form = AccountForm(request.POST)
         if form.is_valid():
@@ -203,7 +281,7 @@ def account_new(request):
             account.save()
             logger.info('Successfully created new account')
             messages.success(request, 'Successfully created new account!')
-            if request.POST.get('again'):
+            if request.POST.get('again'):  # Are we adding another account?
                 return redirect('account_new')
             return redirect('account_index')
     else:
@@ -213,6 +291,7 @@ def account_new(request):
 
 @login_required
 def account_edit(request, account_id):
+    """The account edit page. Handles account updates."""
     account = get_object_or_404(Account, pk=account_id)
     if request.method == 'POST':
         form = AccountForm(request.POST, instance=account)
@@ -227,8 +306,9 @@ def account_edit(request, account_id):
 
 
 @login_required
-@supervisor_required
+@admin_required
 def account_delete(request, account_id):
+    """The account delete page. Only accessible to admins."""
     account = get_object_or_404(Account, pk=account_id)
     account.delete()
     logger.info('Account "{}" has been deleted.'.format(account.name))
@@ -239,6 +319,7 @@ def account_delete(request, account_id):
 @login_required
 @supervisor_required
 def account_check_index(request, account_id):
+    """The checks for an account. Only supervisor/admin."""
     account = get_object_or_404(Account, pk=account_id)
     checks = account.check_set.all()
     checks = process_params(request.user, checks, request.GET, [''])
@@ -252,6 +333,7 @@ def account_check_index(request, account_id):
 
 @login_required
 def account_check_new(request, account_id):
+    """Creates a check under an account."""
     account = get_object_or_404(Account, pk=account_id)
     if request.method == 'POST':
         form = CheckForm(request.POST)
@@ -262,7 +344,7 @@ def account_check_new(request, account_id):
             check.save()
             logger.info('Successfully added check #{}'.format(check.number))
             messages.success(request, 'Successfully added new check!')
-            if request.POST.get('again'):
+            if request.POST.get('again'):  # Add another check for this account?
                 return redirect(account_check_new, account_id)
             return redirect(account_index)
     else:
@@ -274,6 +356,7 @@ def account_check_new(request, account_id):
 @login_required
 @admin_required
 def company_index(request):
+    """The company index page. Only accessible to admins."""
     companies = Company.objects.all()
     companies = process_params(request.user, companies, request.GET, ['name__icontains'])
     context = process_context(request.GET, {'companies': companies, 'heading': 'All Companies'})
@@ -282,6 +365,7 @@ def company_index(request):
 
 @logout_required
 def company_choose(request):
+    """When registering, choose what company you work for."""
     companies = Company.objects.all()
     companies = process_params(request.user, companies, request.GET, ['name__icontains'])
     context = process_context(request.GET, {'companies': companies})
@@ -291,6 +375,7 @@ def company_choose(request):
 @login_required
 @admin_required
 def company_new(request):
+    """Creates a company and handles form data. Admin only."""
     if request.method == 'POST':
         form = CompanyForm(request.POST)
         if form.is_valid():
@@ -307,6 +392,7 @@ def company_new(request):
 @login_required
 @admin_required
 def company_edit(request, company_id):
+    """The edit company page. Admin only. Handles company updates."""
     company = get_object_or_404(Company, pk=company_id)
     if request.method == 'POST':
         form = CompanyForm(request.POST, instance=company)
@@ -323,6 +409,7 @@ def company_edit(request, company_id):
 @login_required
 @admin_required
 def company_delete(request, company_id):
+    """Deletes a company. Admin only."""
     company = get_object_or_404(Company, pk=company_id)
     company.delete()
     logger.info('Company {} has been deleted.'.format(company))
@@ -333,6 +420,7 @@ def company_delete(request, company_id):
 @login_required
 @admin_required
 def company_simulate(request, company_id):
+    """Lets an admin start simulating a company."""
     company = get_object_or_404(Company, pk=company_id)
     request.user.profile.simulate(company)
     return redirect('company_index')
@@ -341,12 +429,14 @@ def company_simulate(request, company_id):
 @login_required
 @admin_required
 def company_stop_simulate(request):
+    """Stops an admin from simulating a company"""
     request.user.profile.stop_simulate()
     return redirect('company_index')
 
 
 @logout_required
 def register(request, company_id):
+    """The registration page. Handles new user creation."""
     company = get_object_or_404(Company, pk=company_id)
 
     if request.method == 'POST':
@@ -357,7 +447,6 @@ def register(request, company_id):
             user.save()
 
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-
             logger.info('Account {} created'.format(user.profile.full_name()))
             messages.success(request, 'Account successfully created!')
             return redirect('index')
@@ -369,9 +458,11 @@ def register(request, company_id):
 
 @login_required
 def letter(request):
+    """Generates all letters for a user and returns the generated PDF"""
     checks = Check.objects.filter(user=request.user)
     company = request.user.profile.company
 
+    # Make sure there are letters to be generated
     if not len([x.current_letter() for x in checks if x.current_letter() >= 1]):
         messages.info(request, 'No letters to generate.')
         return redirect('check_index')
@@ -391,6 +482,7 @@ def letter(request):
 
 @login_required
 def check_letter1(request, check_id):
+    """Generates the first letter for a check"""
     check = get_object_or_404(Check, pk=check_id)
     company = request.user.profile.company
     template = get_template('letters/letter1.html')
@@ -401,6 +493,7 @@ def check_letter1(request, check_id):
 
 @login_required
 def check_letter2(request, check_id):
+    """Generates the second letter for a check"""
     check = get_object_or_404(Check, pk=check_id)
     company = request.user.profile.company
     template = get_template('letters/letter2.html')
@@ -411,6 +504,7 @@ def check_letter2(request, check_id):
 
 @login_required
 def check_letter3(request, check_id):
+    """Generates the third letter for a check"""
     check = get_object_or_404(Check, pk=check_id)
     company = request.user.profile.company
     template = get_template('letters/letter3.html')
@@ -422,10 +516,13 @@ def check_letter3(request, check_id):
 @login_required
 @supervisor_required
 def user_index(request):
+    """Displays all users accessible to user. Supervisor/admin only."""
     if request.user.profile.admin_not_simulating():
+        # Admin has access to all users
         users = User.objects.all()
         heading = 'All Users'
     else:
+        # Supervisor has access to company users
         users = User.objects.filter(profile__company=request.user.profile.company)
         heading = 'Users for Company: {}'.format(request.user.profile.company)
     users = process_params(request.user, users, request.GET, ['first_name__icontains', 'last_name__icontains', 'email__icontains', 'username__icontains'], '-date_joined')
@@ -436,6 +533,7 @@ def user_index(request):
 @login_required
 @supervisor_required
 def user_check_index(request, user_id):
+    """The user's checks. Supervisor/admin only."""
     user = get_object_or_404(User, pk=user_id)
     checks = user.check_set.all()
     checks = process_params(request.user, checks, request.GET, [''])
@@ -450,6 +548,7 @@ def user_check_index(request, user_id):
 @login_required
 @supervisor_required
 def user_edit(request, user_id):
+    """The user edit page. Supervisor/admin only."""
     user = get_object_or_404(User, pk=user_id)
     if request.method == 'POST':
         user_form = UserEditForm(request.POST, instance=user)
@@ -469,6 +568,7 @@ def user_edit(request, user_id):
 @login_required
 @admin_required
 def user_delete(request, user_id):
+    """Deletes a user. Admin only."""
     user = get_object_or_404(User, pk=user_id)
     user.delete()
     logger.info('User "{}" has been deleted.'.format(user))
@@ -478,16 +578,21 @@ def user_delete(request, user_id):
 
 @login_required
 def report(request):
+    """Generates all reports accessible to a user."""
     if request.user.profile.admin_not_simulating():
+        # Admin sees reports for all checks
         checks = Check.objects.all()
         heading = 'Reports for All Checks'
     elif request.user.profile.supervisor_up():
+        # Supervisor sees reports for a company
         checks = Check.objects.filter(user__profile__company=request.user.profile.company)
         heading = 'Reports for Company: {}'.format(request.user.profile.company)
     else:
+        # Regular user sees reports for his checks.
         checks = Check.objects.filter(user=request.user)
         heading = 'Reports for Your Checks'
 
+    # Find out the start and end date
     end_date = datetime.datetime.now().date()
     start_date = end_date - datetime.timedelta(days=7)
     if request.method == 'POST':
@@ -499,6 +604,7 @@ def report(request):
         form = ReportForm()
     logger.info(start_date)
 
+    # Generate the number of checks paid/not paid.
     copy = checks.filter(date_created__date__range=(start_date, end_date))
     paid = len([c for c in copy if c.paid])
     not_paid = len(copy) - paid
@@ -510,15 +616,18 @@ def report(request):
     chart.add_bars(data)
     chart.to_svg('checkit/static/img/bars.svg')
 
+    # Generate the letter count charts (django-chartit)
     letter_charts = []
     for i in range(3):
         letter_charts.append(generate_letter_chart(i + 1, checks, start_date, end_date))
 
+    # Return all the charts to report view
     return render(request, 'report/report.html', {'letter_charts': letter_charts, 'form': form, 'heading': heading})
 
 
 @login_required
 def profile(request):
+    """The profile edit page for a user"""
     user = request.user
     if request.method == 'POST':
         user_form = ProfileUserForm(request.POST, instance=user)

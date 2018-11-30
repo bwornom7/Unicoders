@@ -1,8 +1,16 @@
+"""
+This file contains all of the urls for the
+checkit app. All urls go to the views.py file
+"""
+
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from . import views
 
+# These patterns are checked in order, and a regular
+# expression is applied to each to see if the requested
+# url matches the request.
 urlpatterns = [
     path('', views.index, name='index'),
     path('about/', views.about, name='about'),

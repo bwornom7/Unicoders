@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Enigmatic';
-  src: url("../fonts/enigmatic.ttf") format("truetype"), local("Enigmatic"); }
+  src: url("../fonts/enigmatic.3d871206629e.ttf") format("truetype"), local("Enigmatic"); }
 
 @font-face {
   font-family: 'Expressway';
-  src: url("../fonts/expressway.ttf") format("truetype"), local("Expressway"); }
+  src: url("../fonts/expressway.2cf91b9f5c1d.ttf") format("truetype"), local("Expressway"); }
 
 /*!
  * Bootstrap v4.0.0 (https://getbootstrap.com)
@@ -6497,7 +6497,6 @@ label {
   background-color: #ff9696; }
 
 .actions {
-  white-space: nowrap;
   padding: 0;
   margin: 0;
   list-style: none; }
