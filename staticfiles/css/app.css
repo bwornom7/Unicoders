@@ -6281,6 +6281,29 @@ th {
 #main-content {
   padding-bottom: 210px; }
 
+.dropdown {
+  float: right;
+  padding: 0.75em;
+  position: relative;
+  display: inline-block; }
+
+.dropdown-content {
+  background-color: white;
+  display: none;
+  position: absolute;
+  z-index: 1;
+  box-shadow: 0 0 4px 0 black; }
+  .dropdown-content li {
+    width: 100%;
+    padding: 4px 10px; }
+    .dropdown-content li a {
+      text-decoration: none; }
+    .dropdown-content li:hover {
+      background-color: #61c0d1; }
+
+.dropdown:hover .dropdown-content {
+  display: block; }
+
 footer {
   padding-top: 1em;
   background-color: #23272c;
@@ -6409,6 +6432,7 @@ header {
     color: inherit; }
 
 .company-card {
+  cursor: pointer;
   background-color: white;
   border-radius: .5em;
   padding: 0.7em;
@@ -6514,6 +6538,7 @@ label {
   .data-table tbody .row-warning td {
     background-color: #FFBBBB; }
   .data-table tbody tr {
+    cursor: pointer;
     box-shadow: #AAAAAA 0px 2px 4px 0px;
     border-radius: .5em;
     transition-duration: 0.2s; }
@@ -6551,7 +6576,19 @@ label {
   text-decoration: none !important; }
 
 .about-card img {
-  max-width: 200px;
+  width: 100%;
   border-radius: 1em; }
+
+.ui-datepicker-calendar th {
+  background-color: white; }
+
+.chart {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  box-shadow: 1px 1px 4px 0 black; }
+
+.home-img {
+  max-width: 100%;
+  border: 1px solid black; }
 
 /*# sourceMappingURL=app.css.map */
