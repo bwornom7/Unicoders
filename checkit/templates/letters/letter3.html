@@ -1,1 +1,26 @@
-<p>We're going to put you on trial in court.</p>
+<h1>NOTICE OF LAWSUIT</h1>
+<br>
+<p>{{ company.street }}</p>
+<p>{{ company.city }}, {{ company.state }} {{ company.zip_code }}</p>
+<br>
+<p>{% now 'm-d-Y' %}</p>
+<br>
+<p>{{ check.account.name }}</p>
+<p>{{ check.account.street }}, {{ check.account.state }} {{ check.account.zip_code }}</p>
+<br>
+<p>RE: Notice of Dishonored Check</p>
+<br>
+<p>Dear {{ check.account.name }}:</p>
+
+
+<p>You are hereby given notice that {{ user.profile.full_name }}
+intends to commence a lawsuit against you for {{ check.amount }}. 
+The foregoing is not intended to be a complete recitation of all applicable law and/or facts, 
+and shall not be deemed to constitute a waiver or relinquishment of any of {{ user.profile.full_name }}'s rights or remedies, 
+whether legal or equitable, all of which are hereby expressly reserved, 
+including {{ user.profile.full_name }}'s right to all available remedies against {{ user.profile.full_name }}, 
+including but not limited to the recovery of costs and attorneys’ fees.
+
+<br>
+<p>Sincerely,</p>
+<p>{{ user.profile.full_name }}</p>
