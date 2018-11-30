@@ -188,7 +188,7 @@ def account_index(request):
     else:
         accounts = Account.objects.filter(company=request.user.profile.company)
         heading = 'Accounts for Company: {}'.format(request.user.profile.company)
-    accounts = process_params(request.user, accounts, request.GET, ['name__icontains', 'number__icontains'])
+    accounts = process_params(request.user, accounts, request.GET, ['name__icontains', 'number__icontains', 'route__icontains', 'street__icontains'])
     context = process_context(request.GET, {'accounts': accounts, 'heading': heading})
     return render(request, 'accounts/index.html', context)
 
@@ -268,7 +268,7 @@ def account_check_new(request, account_id):
     else:
         form = CheckForm()
 
-    return render(request, 'checks/new.html', {'form': form})
+    return render(request, 'checks/new.html', {'form': form, 'account': account})
 
 
 @login_required
@@ -428,7 +428,7 @@ def user_index(request):
     else:
         users = User.objects.filter(profile__company=request.user.profile.company)
         heading = 'Users for Company: {}'.format(request.user.profile.company)
-    users = process_params(request.user, users, request.GET, ['first_name__icontains', 'last_name__icontains', 'email__icontains'], '-date_joined')
+    users = process_params(request.user, users, request.GET, ['first_name__icontains', 'last_name__icontains', 'email__icontains', 'username__icontains'], '-date_joined')
     context = process_context(request.GET, {'users': users, 'heading': heading}, '-date_joined')
     return render(request, 'users/index.html', context)
 

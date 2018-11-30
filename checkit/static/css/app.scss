@@ -243,6 +243,7 @@ header {
 }
 
 .company-card {
+  cursor: pointer;
   background-color: white;
   border-radius: .5em;
   padding: 0.7em;
@@ -383,6 +384,7 @@ label {
       background-color: #FFBBBB;
     }
     tr {
+      cursor: pointer;
       box-shadow: #AAAAAA 0px 2px 4px 0px;
       border-radius: .5em;
       transition-duration: 0.2s;
@@ -431,7 +433,7 @@ label {
 
 .about-card {
   img {
-    max-width: 200px;
+    width: 100%;
     border-radius: 1em;
   }
 }
@@ -442,4 +444,9 @@ label {
   margin-top: 1em;
   margin-bottom: 1em;
   box-shadow: 1px 1px 4px 0 black;
+}
+
+.home-img {
+  max-width: 100%;
+  border: 1px solid black;
 }

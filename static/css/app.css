@@ -6432,6 +6432,7 @@ header {
     color: inherit; }
 
 .company-card {
+  cursor: pointer;
   background-color: white;
   border-radius: .5em;
   padding: 0.7em;
@@ -6537,6 +6538,7 @@ label {
   .data-table tbody .row-warning td {
     background-color: #FFBBBB; }
   .data-table tbody tr {
+    cursor: pointer;
     box-shadow: #AAAAAA 0px 2px 4px 0px;
     border-radius: .5em;
     transition-duration: 0.2s; }
@@ -6574,7 +6576,7 @@ label {
   text-decoration: none !important; }
 
 .about-card img {
-  max-width: 200px;
+  width: 100%;
   border-radius: 1em; }
 
 .ui-datepicker-calendar th {
@@ -6585,4 +6587,8 @@ label {
   margin-bottom: 1em;
   box-shadow: 1px 1px 4px 0 black; }
 
-/*# sourceMappingURL=../../../../../../../static/css/app.css.map */
+.home-img {
+  max-width: 100%;
+  border: 1px solid black; }
+
+/*# sourceMappingURL=app.css.map */

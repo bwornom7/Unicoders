@@ -62,7 +62,9 @@ class Account(models.Model):
         indexes = [
             models.Index(fields=['date_created'], name='account_date_created_idx'),
             models.Index(fields=['name'], name='account_name_idx'),
-            models.Index(fields=['number'], name='account_number_idx')
+            models.Index(fields=['number'], name='account_number_idx'),
+            models.Index(fields=['route'], name='account_route_idx'),
+            models.Index(fields=['street'], name='account_street_idx')
         ]
 
 

@@ -20,7 +20,7 @@
 <div class='row'>
   {% for company in companies %}
     <div class='col-sm-12 col-md-6 col-lg-4'>
-      <div class='company-card'>
+      <div onclick='window.location = "{% url 'company_edit' company.id %}"' class='company-card'>
         <h3 class='text-center'>{{ company }}</h3>
         <p>{{ company.desc }}</p>
         <ul class='actions'>
@@ -30,7 +30,7 @@
           <li><a href='{% url 'company_edit' company.id %}' data-toggle='tooltip' title='Edit Company'>
             <i class='fas fa-cog'></i>
           </a></li>
-          <li><a href='{% url 'company_delete' company.id %}' data-toggle='tooltip' title='Delete Company'>
+          <li><a onclick='return confirm("Are you sure you want to delete company \"{{ company }}\"?")' href='{% url 'company_delete' company.id %}' data-toggle='tooltip' title='Delete Company'>
             <i class='fas fa-trash'></i>
           </a></li>
         </ul>

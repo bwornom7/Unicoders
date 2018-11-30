@@ -9,7 +9,7 @@
     <h3>{{ heading }}</h3>
   </div>
   <div class='col-sm-12 col-md-6'>
-    <input value='{% if search %}{{search}}{% endif %}' id='search' type='text' placeholder='Search Account Name or Email' onkeypress='handlesearch(event)'/>
+    <input value='{% if search %}{{search}}{% endif %}' id='search' type='text' placeholder='Search Account Name, Username, or Email' onkeypress='handlesearch(event)'/>
   </div>
   <div class='col-sm-12'><hr/></div>
 </div>
@@ -29,12 +29,12 @@
       </thead>
       <tbody>
         {% for u in users %}
-          <tr>
+          <tr onclick='window.location = "{% url 'user_edit' u.id %}"'>
             <td>{{ u.profile.full_name }}</td>
             <td>{{ u.username }}</td>
-            <td>{{ u.profile.company.name }}</td>
+            <td>{% if u.profile.company %}{{ u.profile.company.name }}{% else %}Admin{% endif %}</td>
             <td>{{ u.email }}</td>
-            <td>{{ u.date_joined}}</td>
+            <td>{{ u.date_joined.date }}</td>
             <td>
               <ul class='actions'>
                 <li><a href='{% url 'user_edit' u.id %}' data-toggle='tooltip' title='Edit User'>
@@ -44,7 +44,7 @@
                   <i class='fas fa-folder'></i>
                 </a></li>
                 {% if user.profile.admin %}
-                  <li><a href='{% url 'user_delete' u.id %}' data-toggle='tooltip' title='Delete User'>
+                  <li><a onclick='return confirm("Are you sure you want to delete user \"{{ u }}\"?")' href='{% url 'user_delete' u.id %}' data-toggle='tooltip' title='Delete User'>
                     <i class='fas fa-trash'></i>
                   </a></li>
                 {% endif %}
