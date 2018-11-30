@@ -31,6 +31,10 @@ $(document).ready(() => {
     a.href = '?' + wparams.toString();
   });
 
+  $('a').click((event) => {
+    event.stopPropagation();
+  });
+
   $('.fa-cog').hover(function() {
     $(this).toggleClass('fa-spin');
   });
