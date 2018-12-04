@@ -4,7 +4,7 @@
 {% block title %}{{ block.super }} - Reports{% endblock %}
 
 {% block content %}
-  {{ letter_charts|load_charts:'letter1_chart,letter2_chart,letter3_chart' }}
+  {{ charts|load_charts:'paid_count_chart,paid_total_chart,letter1_chart,letter2_chart,letter3_chart' }}
   <div class='row'>
     <div class='col-sm-12'>
       <h3>{{ heading }}</h3>
@@ -37,19 +37,23 @@
     </div>
   </div>
   <div class='row'>
-    <div class='col'>
+    <div class='col-sm-12 col-md-6'>
+      <div class='chart' id='paid_count_chart'></div>
+    </div>
+    <div class='col-sm-12 col-md-6'>
+      <div class='chart' id='paid_total_chart'></div>
+    </div>
+    <div class='col-sm-12 col-md-6'>
       <div class='chart' id='letter1_chart'></div>
     </div>
-    <div class='col'>
+    <div class='col-sm-12 col-md-6'>
       <div class='chart' id='letter2_chart'></div>
     </div>
-    <div class='col'>
+    <div class='col-sm-12 col-md-6'>
       <div class='chart' id='letter3_chart'></div>
     </div>
-  </div>
-  <div class='row'>
-    <div class='col'>
-      <img class='chart' src="/static/img/bars.svg" width='50%'/>
+    <div class='col-sm-12 col-md-6'>
+      <img class='chart' src="/static/img/bars.svg" width='100%'/>
     </div>
   </div>
 {% endblock %}

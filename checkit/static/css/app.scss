@@ -451,3 +451,11 @@ label {
   max-width: 100%;
   border: 1px solid black;
 }
+
+.hidden {
+  display: none;
+}
+
+.primary-color {
+  color: theme-color('primary');
+}

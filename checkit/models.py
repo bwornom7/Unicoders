@@ -118,6 +118,7 @@ class Check(models.Model):
     letter1_date = models.DateField(null=True)
     letter2_date = models.DateField(null=True)
     letter3_date = models.DateField(null=True)
+    paid_date = models.DateField(null=True)
 
     def __str__(self):
         """Returns a textual representation of the check"""
@@ -182,6 +183,7 @@ class Check(models.Model):
         self.amount_paid += amount
         if self.amount_paid >= self.account.company.late_fee + self.amount:
             self.paid = True
+            self.paid_date = datetime.datetime.now().date()
             ret = 'Successfully paid off check!'
         self.save()
         return ret

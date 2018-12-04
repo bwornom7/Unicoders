@@ -17,13 +17,11 @@
       {{ form.non_field_errors }}
 
       <div class='row'>
-        {% if user.profile.supervisor_up %}
-          <div class='col-sm-12'>
-            <label for='id_paid'>Paid?</label>
-            {{ form.paid }}
-            {{ form.paid.errors }}
-          </div>
-        {% endif %}
+        <div class='col-sm-12 {% if not user.profile.supervisor_up %}hidden{% endif %}'>
+          <label for='id_paid'>Paid?</label>
+          {{ form.paid }}
+          {{ form.paid.errors }}
+        </div>
         <div class='col-sm-12'>
           {% include 'snippets/field.html' with field=form.number %}
         </div>
