@@ -14,6 +14,7 @@ from .models import Check, Account, Company
 from django.core.paginator import Paginator
 from django.db.models import Q, Count, Sum
 from django.http import HttpResponse
+from django.utils.http import urlquote
 
 from io import StringIO, BytesIO
 from xhtml2pdf import pisa
@@ -24,6 +25,7 @@ from operator import ior
 from chartit import DataPool, Chart
 import logging
 import leather
+import time
 
 # The logger for printing data to console
 logger = logging.getLogger(__name__)
@@ -484,7 +486,10 @@ def letter(request):
     pdf = pisa.pisaDocument(StringIO(html), dest=result)
     if not pdf.err:
         logger.info('Letters generated')
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
+        filename = 'Letters-{}.pdf'.format(time.strftime('%Y%m%d-%H%M'))
+        response = HttpResponse(result.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename={}'.format(urlquote(filename))
+        return response
     else:
         messages.error(request, 'Error generating letters PDF.')
         return redirect('check_index')
